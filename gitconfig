@@ -1,0 +1,9 @@
+[user]
+	email=git@tayari.gg
+	name=Daylam Tayari
+[commit]
+	gpgSign=true
+[tag]
+	forceSignAnnotated=true
+[init]
+	defaultBranch=master
