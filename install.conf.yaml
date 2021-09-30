@@ -19,10 +19,9 @@
         - ~/Downloads
         - ~/Documents
 - shell:
+        - git submodule update --init --recursive
         - chmod +x setup.sh
         - sh setup.sh
-        - git clone https://github.com/ohmyzsh/ohmyzsh.git .oh-my-zsh/
-        - git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
         - fc-cache -rv
         - export PATH="~/.local/bin/
         - chsh -s $(which zsh)
