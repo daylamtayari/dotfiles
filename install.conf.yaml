@@ -17,6 +17,7 @@
         ~/.zshrc: zsh/zshrc
         ~/.p10k.zsh: p10k/.p10k.zsh
         ~/.fonts: fonts
+        ~/.config/ranger/rc.conf: ranger/rc.conf
         ~/.config/.discocss/custom.css: discocss/custom.css
         ~/.mozilla/firefox/profile.default/chrome: firefox
         ~/.dotfiles: ''
