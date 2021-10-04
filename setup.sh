@@ -48,7 +48,7 @@ esac
 read -e -p 'Do you which to update the system? (y/n): ' update
 
 ## Ask the user which distro they are running:
-distro=0
+distro='null'
 check_distro(){
 	echo "Please enter which distro is the current system based off:"
 	echo "1: Deian-based --- 2: Fedora-based --- 3: Arch-based --- 4: Red Hat-based --- 5: Suse-based."
@@ -56,7 +56,23 @@ check_distro(){
 	if [[ $DISTRO<1 || $DISTRO>5 ]]; then
 		echo 'Invalid input provided for distro version - skipping dependency installation.'
 	else
-		distro=$DISTRO
+		case $DISTRO in
+			1)
+				distro='debian'
+				;;
+			2)
+				distro='fedora'
+				;;
+			3)
+				distro='arch'
+				;;
+			4)
+				distro='redHat'
+				;;
+			5)
+				distro='suse'
+				;;
+		esac
 	fi
 }
 
