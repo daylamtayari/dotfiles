@@ -42,10 +42,10 @@ case $gpg_configured in
 		;;
 esac
 
-# Check if the user wants to install dependencies and has root access:
+# Check if the user wants to install dependencies and update, and has root access:
 
-## Check if the script is being ran as sudo 
-read -e -p 'Do you which to install all dependencies of the dotfiles? (y/n): ' depen
+## Ask the user if they wish to update:
+read -e -p 'Do you which to update the system? (y/n): ' update
 
 ## Ask the user which distro they are running:
 distro=0
@@ -63,14 +63,19 @@ check_distro(){
 ## Check if the user is able to execute root commands:
 is_root='null'
 check_root(){
-	echo 'To install dependencies, you need to be able to authenticate as root - please authenticate as root:'
+	echo 'To install, you need to be able to authenticate as root - please authenticate as root:'
 	if [[ "`sudo -l`" == *"(root)"* ]]; then
 		is_root='y'
-		echo 'Authentication as sudo successful - installing dependencies...'
+		echo 'Authentication as sudo successful - installing...'
 	else
 		is_root='n'
-		echo 'Authentication as sudo unsuccessful - skipping dependency install.'
+		echo 'Authentication as sudo unsuccessful - skipping install.'
 	fi
+}
+
+## Function to update the system:
+update(){
+	echo ''
 }
 
 ## Function to install dependencies:
@@ -78,11 +83,35 @@ install_dependencies(){
 	echo ''
 }
 
+## Check if the user wants to update and execute accordingly:
+case $update in
+	"y"|"Y")
+		distro
+		check_root
+		if [ "$is_root" == 'y' ];; then
+			update
+		fi
+		;;
+	"n"|"N")
+		echo 'Updates wont be checked for or installed.'
+		;;
+	*)
+		echo 'Invalid input provided for the update check value - skipping.'
+		;;
+esac
+
 ## Check if user wants to install dependencies and execute the corresponding functions:
+
+read -e -p 'Do you which to install all dependencies of the dotfiles? (y/n): ' depen
+
 case $depen in
 	"y"|"Y")
-		check_distro
-		check_root
+		if [ "$distro" == 'null' ]; then
+			check_distro
+		fi
+		if [ "$is_root" == 'null' ]; then
+			check_root
+		fi
 		if [ "$is_root" == 'y' ]; then
 			install_dependencies
 		fi
