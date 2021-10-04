@@ -10,7 +10,7 @@ check_git(){
 }
 
 check_gpg(){
-	if [[ "`gpg`" != *"gpg: WARNING: no command supplied."* ]]; then
+	if [[ "`gpg --version`" != *"gpg (GnuPG)"* ]]; then
 		echo 'Error: GPG is NOT installed.'
 		exit 1
 	fi
@@ -21,5 +21,7 @@ check_git
 check_gpg
 
 # Execute the dotbot installation script:
+chmod +x setup.sh
 chmod +x install
+./setup.sh
 ./install
