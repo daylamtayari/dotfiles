@@ -1,0 +1,13 @@
+{
+	"packageManager": {
+		"debian": 	"apt",
+		"fedora": 	"dnf",
+		"arch": 	"pacman",
+		"redHat": 	"yum",
+		"suse":		"zypper",
+		"installKey":	{
+			"arch":		"-S",
+			"default":	"install"
+		}
+	}
+}
