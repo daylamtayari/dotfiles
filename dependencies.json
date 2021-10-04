@@ -9,5 +9,51 @@
 			"arch":		"-S",
 			"default":	"install"
 		}
+	},
+	"updates": {
+		"updateCheck": {
+			"fedora":	"check-update",
+			"arch": 	"-Sy",
+			"redHat":	"check-update",
+			"suse":		"list-updates",
+			"default": 	"update"
+		},
+		"upgrade": {
+			"arch": 	"-Su",
+			"redHat":	"update",
+			"suse":		"update",
+			"default": 	"upgrade"
+		}
+	},
+	"packages": {
+		"zsh": {
+			"default":	"zsh"
+		},
+		"kitty": {
+			"default": 	"kitty"
+		},
+		"imagemagick": {
+			"fedora": 	"ImageMagick",
+			"redHat":	"ImageMagick",
+			"suse": 	"ImageMagick",
+			"default": 	"imagemagick"
+		},
+		"neovim": {
+			"default": 	"neovim"
+		},
+		"ranger": {
+			"default": 	"ranger"
+		},
+		"firefox": {
+			"debian": 	"firefox-esr",
+			"suse": 	"MozillaFirefox",
+			"default": 	"firefox"
+		},
+		"okular": {
+			"default": 	"okular"
+		},
+		"jq": {
+			"default": 	"jq"
+		}
 	}
 }
