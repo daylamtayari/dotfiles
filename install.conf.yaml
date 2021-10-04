@@ -5,7 +5,7 @@
 
 - shell:
         - chmod +x setup.sh
-        - sh setup.sh
+        - ./setup.sh
 
 - clean: ['~/.config', '~/.gitconfig', '~/.zshrc', '.p10k.zsh']
 
