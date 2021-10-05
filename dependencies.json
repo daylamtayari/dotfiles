@@ -54,6 +54,8 @@
 		},
 		"jq": {
 			"default": 	"jq"
-		}
+		},
+		"exa": {
+			"default": "exa"
 	}
 }

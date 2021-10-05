@@ -9,10 +9,12 @@ alias icat="kitty +kitten icat"
 alias kdiff="kitty +kitten diff"
 
 ## Directory Aliases:
-alias ls='ls --color'
-alias lsa='ls -a'
-alias ll='ls -l'
-alias lla='ls -la'
+alias ls='exa --icons'
+alias lsa='exa -a --icons'
+alias ll='exa --long --icons'
+alias lla='exa --long -a --icons'
+alias lr='exa --recurse'
+alias tree='exa --tree'
 alias md='mkdir -p'
 alias rd='rmdir'
 alias -g ...='../..'
