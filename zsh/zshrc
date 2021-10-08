@@ -11,10 +11,12 @@ alias kdiff="kitty +kitten diff"
 ## Directory Aliases:
 alias ls='exa --icons'
 alias lsa='exa -a --icons'
-alias ll='exa --long --icons'
-alias lla='exa --long -a --icons'
-alias lr='exa --recurse'
-alias tree='exa --tree'
+alias ll='exa --long --git --icons'
+alias lla='exa --long -a --git --icons'
+alias lr='exa --recurse --icons'
+alias lg='exa -lg --git --icons'
+alias lga='exa -lga --git --icons'
+alias tree='exa --tree --icons'
 alias md='mkdir -p'
 alias rd='rmdir'
 alias -g ...='../..'
@@ -24,8 +26,17 @@ alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 alias -g ........='../../../../../../..'
 
+## Git Aliases:
+alias g='git'
+alias gs='git status'
+alias gp='git push'
+alias gpl='git pull'
+alias ga='git add'
+alias glg='git log --graph --oneline --decorate'
+
 ## Miscellaneous Aliases:
 alias volume="amixer sset 'Master'"
 alias vim="nvim"
 alias sign='gpg --detach-sign --armor'
 alias grep='grep --color'
+alias ssh='TERM=xterm-256color ssh'
