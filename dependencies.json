@@ -6,6 +6,7 @@
 		"yum": 		"yum",
 		"zypper":	"zypper",
 		"emerge":	"emerge",
+		"slackpkg":	"slackpkg",
 		"installKey":	{
 			"pacman":	"-S",
 			"emerge":	"-u",
@@ -26,6 +27,7 @@
 			"yum":		"update",
 			"zyppper":	"update",
 			"emerge":	"--update --deep --with-bdeps=y @world",
+			"slackpkg":	"upgrade-all",
 			"default": 	"upgrade"
 		}
 	},
@@ -36,6 +38,7 @@
 		},
 		"kitty": {
 			"emerge":	"z11-terms/kitty",
+			"slackpkg":	"",
 			"default": 	"kitty"
 		},
 		"imagemagick": {
@@ -47,16 +50,19 @@
 		},
 		"neovim": {
 			"emerge": 	"app-editors/neovim",
+			"slackpkg":	"",
 			"default": 	"neovim"
 		},
 		"ranger": {
 			"emerge":	"app-misc/ranger",
+			"slackpkg":	"",
 			"default": 	"ranger"
 		},
 		"firefox": {
 			"apt": 		"firefox-esr",
 			"zyppper": 	"MozillaFirefox",
 			"emerge":	"wwww-client/firefox",
+			"slackpkg":	"mozilla-firefox",
 			"default": 	"firefox"
 		},
 		"okular": {
@@ -65,10 +71,12 @@
 		},
 		"jq": {
 			"emerge":	"app-misc/jq",
+			"slackpkg":	"",
 			"default": 	"jq"
 		},
 		"exa": {
 			"emerge":	"sys-apps/exa",
+			"slackpkg":	"",
 			"default": 	"exa"
 	}
 }
