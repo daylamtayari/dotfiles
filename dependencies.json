@@ -7,59 +7,68 @@
 		"zypper":	"zypper",
 		"emerge":	"emerge",
 		"installKey":	{
-			"pacman":		"-S",
+			"pacman":	"-S",
 			"emerge":	"-u",
 			"default":	"install"
 		}
 	},
 	"updates": {
 		"updateCheck": {
-			"dnf":	"check-update",
+			"dnf":		"check-update",
 			"pacman": 	"-Sy",
-			"yum":	"check-update",
-			"zyppper":		"list-updates",
+			"yum":		"check-update",
+			"zyppper":	"list-updates",
 			"emerge":	"--sync",
 			"default": 	"update"
 		},
 		"upgrade": {
 			"pacman": 	"-Su",
-			"yum":	"update",
-			"zyppper":		"update",
+			"yum":		"update",
+			"zyppper":	"update",
 			"emerge":	"--update --deep --with-bdeps=y @world",
 			"default": 	"upgrade"
 		}
 	},
 	"packages": {
 		"zsh": {
+			"emerge":	"app-shells/zsh",
 			"default":	"zsh"
 		},
 		"kitty": {
+			"emerge":	"z11-terms/kitty",
 			"default": 	"kitty"
 		},
 		"imagemagick": {
-			"dnf": 	"ImageMagick",
-			"yum":	"ImageMagick",
+			"dnf": 		"ImageMagick",
+			"yum":		"ImageMagick",
 			"zyppper": 	"ImageMagick",
+			"emerge":	"media-gfx/imagemagick",
 			"default": 	"imagemagick"
 		},
 		"neovim": {
+			"emerge": 	"app-editors/neovim",
 			"default": 	"neovim"
 		},
 		"ranger": {
+			"emerge":	"app-misc/ranger",
 			"default": 	"ranger"
 		},
 		"firefox": {
-			"apt": 	"firefox-esr",
+			"apt": 		"firefox-esr",
 			"zyppper": 	"MozillaFirefox",
+			"emerge":	"wwww-client/firefox",
 			"default": 	"firefox"
 		},
 		"okular": {
+			"emerge":	"kde-apps/okular",
 			"default": 	"okular"
 		},
 		"jq": {
+			"emerge":	"app-misc/jq",
 			"default": 	"jq"
 		},
 		"exa": {
-			"default": "exa"
+			"emerge":	"sys-apps/exa",
+			"default": 	"exa"
 	}
 }
