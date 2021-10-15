@@ -1,3 +1,10 @@
+# Zinit Imports (with Turbo):
+zinit wait lucid blockf for \
+    atinit"zicompinit; zicdreplay" \  	# Fast compinit startup
+    atload"_zsh_autosuggest_start" \  	# Start zsh-autosuggestions immediately
+    zsh-users/zsh-autosuggestions \	# Autosuggestions 
+    zdharma/fast-syntax-highlighting \	# Syntax highlighting
+
 # Shell Variables:
 export EDITOR=nvim
 export PATH=$HOME/.local/bin:$PATH
