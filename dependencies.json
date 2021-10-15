@@ -1,27 +1,31 @@
 {
 	"packageManager": {
-		"debian": 	"apt",
-		"fedora": 	"dnf",
-		"arch": 	"pacman",
-		"redHat": 	"yum",
-		"suse":		"zypper",
+		"apt": 		"apt",
+		"dnf": 		"dnf",
+		"pacman": 	"pacman",
+		"yum": 		"yum",
+		"zypper":	"zypper",
+		"emerge":	"emerge",
 		"installKey":	{
-			"arch":		"-S",
+			"pacman":		"-S",
+			"emerge":	"-u",
 			"default":	"install"
 		}
 	},
 	"updates": {
 		"updateCheck": {
-			"fedora":	"check-update",
-			"arch": 	"-Sy",
-			"redHat":	"check-update",
-			"suse":		"list-updates",
+			"dnf":	"check-update",
+			"pacman": 	"-Sy",
+			"yum":	"check-update",
+			"zyppper":		"list-updates",
+			"emerge":	"--sync",
 			"default": 	"update"
 		},
 		"upgrade": {
-			"arch": 	"-Su",
-			"redHat":	"update",
-			"suse":		"update",
+			"pacman": 	"-Su",
+			"yum":	"update",
+			"zyppper":		"update",
+			"emerge":	"--update --deep --with-bdeps=y @world",
 			"default": 	"upgrade"
 		}
 	},
@@ -33,9 +37,9 @@
 			"default": 	"kitty"
 		},
 		"imagemagick": {
-			"fedora": 	"ImageMagick",
-			"redHat":	"ImageMagick",
-			"suse": 	"ImageMagick",
+			"dnf": 	"ImageMagick",
+			"yum":	"ImageMagick",
+			"zyppper": 	"ImageMagick",
 			"default": 	"imagemagick"
 		},
 		"neovim": {
@@ -45,8 +49,8 @@
 			"default": 	"ranger"
 		},
 		"firefox": {
-			"debian": 	"firefox-esr",
-			"suse": 	"MozillaFirefox",
+			"apt": 	"firefox-esr",
+			"zyppper": 	"MozillaFirefox",
 			"default": 	"firefox"
 		},
 		"okular": {

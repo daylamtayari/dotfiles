@@ -47,32 +47,26 @@ esac
 ## Ask the user if they wish to update:
 read -e -p 'Do you which to update the system? (y/n): ' update
 
-## Ask the user which distro they are running:
-distro='null'
-check_distro(){
-	echo "Please enter which distro is the current system based off:"
-	echo "1: Deian-based --- 2: Fedora-based --- 3: Arch-based --- 4: Red Hat-based --- 5: Suse-based."
-	read -p "Please enter your selection: " DISTRO
-	if [[ $DISTRO<1 || $DISTRO>5 ]]; then
-		echo 'Invalid input provided for distro version - skipping dependency installation.'
+## Check which package manager the user is using:
+declare -a pms=()
+packagemngr='null'
+check_pm(){
+	if [[ "`which $1`" == "$1 not found" ]]; then
+		echo 'false'
 	else
-		case $DISTRO in
-			1)
-				distro='debian'
-				;;
-			2)
-				distro='fedora'
-				;;
-			3)
-				distro='arch'
-				;;
-			4)
-				distro='redHat'
-				;;
-			5)
-				distro='suse'
-				;;
-		esac
+		echo 'true'
+	fi
+}
+check_pms(){
+	for i in "${pms[@]}"
+	do
+		if [[ "$(check_pm $i)" == 'true' ]]; then
+			packagemngr=$i
+			return [n]
+		fi
+	done
+	if [[ "$packagemngr" == 'null' ]]; then
+		echo 'No supported package manager found - not updating the system or installing dependencies.'
 	fi
 }
 
@@ -102,9 +96,12 @@ install_dependencies(){
 ## Check if the user wants to update and execute accordingly:
 case $update in
 	"y"|"Y")
-		distro
+		check_pms
+		if [ "$packagemngr" == 'null']; then
+			return [n]
+		fi
 		check_root
-		if [ "$is_root" == 'y' ];; then
+		if [ "$is_root" == 'y' ]; then
 			update
 		fi
 		;;
@@ -122,8 +119,8 @@ read -e -p 'Do you which to install all dependencies of the dotfiles? (y/n): ' d
 
 case $depen in
 	"y"|"Y")
-		if [ "$distro" == 'null' ]; then
-			check_distro
+		if [ "$packagemngr" == 'null' ]; then
+			return [n]
 		fi
 		if [ "$is_root" == 'null' ]; then
 			check_root
