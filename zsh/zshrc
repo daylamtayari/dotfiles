@@ -1,3 +1,6 @@
+# ZSH Initialisation:
+eval "$(starship init zsh)"
+
 # Zinit Imports (with Turbo):
 zinit wait lucid blockf for \
     atinit"zicompinit; zicdreplay" \  	# Fast compinit startup
