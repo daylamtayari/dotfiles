@@ -14,6 +14,18 @@ export PATH=$HOME/.local/bin:$PATH
 
 # Aliases:
 
+## Suffix Aliases:
+alias -s txt=nvim
+alias -s py=nvim
+alias -s js=nvim
+alias -s go=nvim
+alias -s sh=nvim
+alias -s tex=nvim
+alias -s json=nvim
+alias -s md=nvim
+alias -s pdf=okular
+alias -s html=firefox
+
 ## Kitty Aliases:
 alias icat="kitty +kitten icat"
 alias kdiff="kitty +kitten diff"
@@ -45,7 +57,7 @@ alias ga='git add'
 alias glg='git log --graph --oneline --decorate'
 alias gd='git diff'
 
-# System Alt Tool Aliases:
+## System Alt Tool Aliases:
 alias du="dust"
 alias df="duf"
 alias top="bottom"
