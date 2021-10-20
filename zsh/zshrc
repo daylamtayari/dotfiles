@@ -43,10 +43,18 @@ alias gp='git push'
 alias gpl='git pull'
 alias ga='git add'
 alias glg='git log --graph --oneline --decorate'
+alias gd='git diff'
+
+## Program Aliases:
+alias python="python3"
+alias jv="java"
+alias vim="nvim"
+alias docker="sudo docker"
 
 ## Miscellaneous Aliases:
 alias volume="amixer sset 'Master'"
-alias vim="nvim"
 alias sign='gpg --detach-sign --armor'
 alias grep='grep --color'
 alias ssh='TERM=xterm-256color ssh'
+alias myip="curl ifconfig.io"
+alias tgz="tar -xvfz"
