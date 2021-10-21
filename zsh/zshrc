@@ -1,20 +1,32 @@
-# ZSH Initialisation:
+# vim:fileencoding=utf-8:foldmethod=marker
+
+#: ZSH Initialisation {{{
+
 eval "$(starship init zsh)"
 
-# Zinit Imports (with Turbo):
+#: }}}
+
+#: Zinit Imports (with Turbo) {{{
+
 zinit wait lucid blockf for \
     atinit"zicompinit; zicdreplay" \  	# Fast compinit startup
     atload"_zsh_autosuggest_start" \  	# Start zsh-autosuggestions immediately
     zsh-users/zsh-autosuggestions \	# Autosuggestions 
     zdharma/fast-syntax-highlighting \	# Syntax highlighting
 
-# Shell Variables:
+#: }}}
+
+#: Shell Variables {{{
+
 export EDITOR=nvim
 export PATH=$HOME/.local/bin:$PATH
 
-# Aliases:
+#: }}}
 
-## Suffix Aliases:
+#: Aliases {{{
+
+#: Suffix Aliases {{{
+
 alias -s txt=nvim
 alias -s py=nvim
 alias -s js=nvim
@@ -26,11 +38,17 @@ alias -s md=nvim
 alias -s pdf=okular
 alias -s html=firefox
 
-## Kitty Aliases:
+#: }}}
+
+#: Kitty Aliases {{{
+
 alias icat="kitty +kitten icat"
 alias kdiff="kitty +kitten diff"
 
-## Directory Aliases:
+#: }}}
+
+#: Directory Aliases {{{
+
 alias ls='exa --icons'
 alias lsa='exa -a --icons'
 alias ll='exa --long --git --icons'
@@ -48,7 +66,10 @@ alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 alias -g ........='../../../../../../..'
 
-## Git Aliases:
+#: }}}
+
+#: Git Aliases {{{
+
 alias g='git'
 alias gs='git status'
 alias gp='git push'
@@ -57,7 +78,10 @@ alias ga='git add'
 alias glg='git log --graph --oneline --decorate'
 alias gd='git diff'
 
-## System Alt Tool Aliases:
+#: }}}
+
+#: System Alt Tool Aliases {{{
+
 alias du="dust"
 alias df="duf"
 alias top="bottom"
@@ -65,16 +89,25 @@ alias htop="bottom"
 alias ping="gping"
 alias ps="procs"
 
-## Program Aliases:
+#: }}}
+
+#: Program Aliases {{{
+
 alias python="python3"
 alias jv="java"
 alias vim="nvim"
 alias docker="sudo docker"
 
-## Miscellaneous Aliases:
+#: }}}
+
+#: Miscellaneous Aliases: {{{
 alias volume="amixer sset 'Master'"
 alias sign='gpg --detach-sign --armor'
 alias grep='grep --color'
 alias ssh='TERM=xterm-256color ssh'
 alias myip="curl ifconfig.io"
 alias tgz="tar -xvfz"
+
+#: }}}
+
+#: }}}
