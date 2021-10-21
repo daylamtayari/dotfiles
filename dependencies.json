@@ -1,17 +1,17 @@
 {
-	"packageManager": {
-		"apt": 		"apt",
-		"dnf": 		"dnf",
-		"pacman": 	"pacman",
-		"yum": 		"yum",
-		"zypper":	"zypper",
-		"emerge":	"emerge",
-		"slackpkg":	"slackpkg",
-		"installKey":	{
-			"pacman":	"-S",
-			"emerge":	"-u",
-			"default":	"install"
-		}
+	"packageManagers": [
+		"apt",
+		"dnf",
+		"pacman",
+		"yum",
+		"zypper",
+		"emerge",
+		"slackpkg"
+	],
+	"installKey": {
+		"pacman":	"-S",
+		"emerge":	"-u",
+		"default":	"install"
 	},
 	"updates": {
 		"updateCheck": {
