@@ -78,5 +78,9 @@
 			"emerge":	"sys-apps/exa",
 			"slackpkg":	"",
 			"default": 	"exa"
+		},
+		"lua": {
+			"default":	""
+		}
 	}
 }
