@@ -2,12 +2,14 @@
 
 #: ZSH Initialisation {{{
 
+export PATH=$HOME/.local/bin:$PATH
 eval "$(starship init zsh)"
 
 #: }}}
 
 #: Zinit Imports (with Turbo) {{{
 
+source ~/.zinit/bin/zinit.zsh
 zinit wait lucid blockf for \
     atinit"zicompinit; zicdreplay" \  	# Fast compinit startup
     atload"_zsh_autosuggest_start" \  	# Start zsh-autosuggestions immediately
@@ -19,7 +21,6 @@ zinit wait lucid blockf for \
 #: Shell Variables {{{
 
 export EDITOR=nvim
-export PATH=$HOME/.local/bin:$PATH
 
 #: }}}
 

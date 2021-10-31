@@ -39,7 +39,7 @@ vim.o.wrap=false
 vim.o.signcolumn='yes'
 
 -- Show substitution live:
-vim.o.inccomand='split'
+vim.o.inccommand='split'
 
 -- Do not hide characters:
 vim.o.conceallevel=0

@@ -7,7 +7,7 @@
 
 - link:
         ~/.local/bin: bin
-        ~/.config/kitty/kitty.conf: kitty.conf
+        ~/.config/kitty/kitty.conf: kitty/kitty.conf
         ~/.config/nvim: nvim
         ~/.gitconfig: gitconfig
         ~/.zshrc: zsh/zshrc
