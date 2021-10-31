@@ -10,7 +10,7 @@ vim.o.encoding="UTF-8"
 vim.o.fileencoding="UTF-8"
 
 -- Show relative line numbers and position:
-vim.o.relativenumber=true
+vim.o.relativenumber=false
 vim.o.number=true
 vim.o.ruler=true
 
@@ -30,6 +30,7 @@ vim.o.showmatch=true
 -- Folding settings (minimum lines to fold):
 vim.o.foldminlines=15
 vim.o.foldcolumn='2'
+vim.o.foldexpr='nvim_treesitter#foldexpr()'
 
 -- Disable line wrapping:
 vim.o.wrap=false
