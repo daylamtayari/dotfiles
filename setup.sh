@@ -181,4 +181,8 @@ fi
 ## Install git submodules:
 git submodule update --init --recursive
 
+
+## Set all necessary scripts as executable:
+chmod +x ranger/scope.sh
+
 echo Setup script has finished!
