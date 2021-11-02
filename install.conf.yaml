@@ -20,6 +20,5 @@
         - ~/Downloads
         - ~/Documents
 - shell:
-        - git submodule update --init --recursive
         - fc-cache -rv
         - export PATH="~/.local/bin/:$PATH"

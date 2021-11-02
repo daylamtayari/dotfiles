@@ -178,4 +178,7 @@ else
 fi
 
 
+## Install git submodules:
+git submodule update --init --recursive
+
 echo Setup script has finished!
