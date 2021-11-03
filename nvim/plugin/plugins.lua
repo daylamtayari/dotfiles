@@ -90,7 +90,7 @@ require('packer').startup(function(use)
 	}
 
 	use {
-		'norcalli/nvim-colorizer.lua'.				-- Colorizer
+		'norcalli/nvim-colorizer.lua',				-- Colorizer
 		config=function()
 			require('colorizer').setup()
 		end
@@ -157,7 +157,7 @@ require('packer').startup(function(use)
 	}
 
 	use {
-		'RRethy/nvim-treesitter-textsubjects'.			-- Additional treesitter test subjects
+		'RRethy/nvim-treesitter-textsubjects',			-- Additional treesitter test subjects
 		config=function()
 			require 'nvim-treesitter.configs'.setup{
 				textsubjects={
@@ -165,7 +165,7 @@ require('packer').startup(function(use)
 						enable=true,
 						keymaps={
 							["af"]="@function.outer",
-							["if"]="@function.inner".
+							["if"]="@function.inner",
 							["ac"]="@class.outer",
 							["ic"]="@class.inner",
 						},
