@@ -185,4 +185,11 @@ git submodule update --init --recursive
 ## Set all necessary scripts as executable:
 chmod +x ranger/scope.sh
 
+
+## Install plugin dependencies with git:
+### Packer:
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+	~/.local/share/nvim/site/pack/packer/start/packer.nvim
+
+
 echo Setup script has finished!
