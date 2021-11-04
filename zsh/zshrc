@@ -113,3 +113,9 @@ alias tgz="tar -xvfz"
 #: }}}
 
 #: }}}
+
+#: Themeing {{{
+
+typeset -g POWERLEVEL9k_INSTANT_PROMPT=off
+
+#: }}}
