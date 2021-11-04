@@ -116,6 +116,13 @@ alias tgz="tar -xvfz"
 
 #: Themeing {{{
 
+#: p10k {{{
+
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+ZSH_THEME="powerlevel10k/powerlevel10k"
 typeset -g POWERLEVEL9k_INSTANT_PROMPT=off
+
+#: }}}
+
 
 #: }}}
