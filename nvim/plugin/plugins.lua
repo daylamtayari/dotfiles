@@ -104,7 +104,7 @@ require('packer').startup(function(use)
 	}
 
 	use {
-		'kristijanhusak/orgmove.nvim',				-- Orgmode
+		'kristijanhusak/orgmode.nvim',				-- Orgmode
 		branch='tree-sitter',
 		config=function()
 			require('orgmode').setup({
@@ -250,7 +250,7 @@ require('packer').startup(function(use)
 	
 	use 'wellle/targets.vim'					-- Enhanced text objects
 	use 'chaoren/vim-wordmotion'					-- Enhanced word objects
-	use 'junegunn/vim-after-objectif'				-- Adds an 'after' object
+	use 'junegunn/vim-after-object'					-- Adds an 'after' object
 
 
 	------------------------------------------
