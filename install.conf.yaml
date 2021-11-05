@@ -15,7 +15,7 @@
         ~/.fonts: fonts
         ~/.config/ranger: ranger
         ~/.config/.discocss/custom.css: discocss/custom.css
-        ~/.mozilla/firefox/profile.default/chrome: firefox
+        ~/.mozilla/firefox/profile.default: firefox
 - create:
         - ~/Downloads
         - ~/Documents
