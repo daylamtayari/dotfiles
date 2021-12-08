@@ -11,10 +11,10 @@ eval "$(starship init zsh)"
 
 source ~/.zinit/bin/zinit.zsh
 zinit wait lucid blockf for \
-    atinit"zicompinit; zicdreplay" \  	# Fast compinit startup
-    atload"_zsh_autosuggest_start" \  	# Start zsh-autosuggestions immediately
-    zsh-users/zsh-autosuggestions \	# Autosuggestions 
-    zdharma/fast-syntax-highlighting \	# Syntax highlighting
+    atinit"zicompinit; zicdreplay" \    # Fast compinit startup
+    atload"_zsh_autosuggest_start" \    # Start zsh-autosuggestions immediately
+    zsh-users/zsh-autosuggestions \ # Autosuggestions
+    zdharma/fast-syntax-highlighting \  # Syntax highlighting
 
 #: }}}
 
@@ -103,12 +103,16 @@ alias docker="sudo docker"
 #: }}}
 
 #: Miscellaneous Aliases: {{{
+alias -g gpg="qubes-gpg-client-wrapper"
 alias volume="amixer sset 'Master'"
 alias sign='gpg --detach-sign --armor'
 alias grep='grep --color'
 alias ssh='TERM=xterm-256color ssh'
 alias myip="curl ifconfig.io"
 alias tgz="tar -xvfz"
+alias qc='qvm-copy-to-vm'
+alias qm='qvm-move-to-vm'
+alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 
 #: }}}
 
@@ -126,3 +130,6 @@ typeset -g POWERLEVEL9k_INSTANT_PROMPT=off
 
 
 #: }}}
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+discocss
+export QUBES_GPG_DOMAIN=gpg
