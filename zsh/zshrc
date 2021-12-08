@@ -15,6 +15,7 @@ zinit wait lucid blockf for \
     atload"_zsh_autosuggest_start" \    # Start zsh-autosuggestions immediately
     zsh-users/zsh-autosuggestions \ # Autosuggestions
     zdharma/fast-syntax-highlighting \  # Syntax highlighting
+source ~/.aliases.zsh   # local-aliases.zsh file which contains local aliases
 
 #: }}}
 

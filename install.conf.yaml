@@ -11,6 +11,7 @@
         ~/.config/nvim: nvim
         ~/.gitconfig: gitconfig
         ~/.zshrc: zsh/zshrc
+        ~/.aliases.zsh: zsh/local-aliases.zsh
         ~/.p10k.zsh: p10k/p10k.zsh
         ~/.fonts: fonts
         ~/.config/ranger: ranger
