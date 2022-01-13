@@ -5,6 +5,13 @@
 -- Global Options: --
 ---------------------
 
+vim.g.calvera_italic_comments = true
+vim.g.calvera_italic_keywords = true
+vim.g.calvera_contrast = false
+vim.g.calvera_borders = true
+vim.g.calvera_custom_colors = { selection = "#36366b" }
+require('calvera').set()
+
 -- Encoding Options:
 vim.o.encoding="UTF-8"
 vim.o.fileencoding="UTF-8"
@@ -24,7 +31,7 @@ vim.o.autoindent=true
 -- Color and Syntax Highlighting:
 vim.o.termguicolors=true
 vim.o.syntax='on'
-vim.o.cursorline=true
+--vim.o.cursorline=true
 vim.o.showmatch=true
 
 -- Folding settings (minimum lines to fold):

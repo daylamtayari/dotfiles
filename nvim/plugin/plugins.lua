@@ -3,6 +3,7 @@ require('packer').startup(function(use)
 	-- Heavily inspired by brokenbyte's NeoVim configurations.
 	-- https://gitlab.com/brokenbyte/dotfiles/-/tree/master/dot_config/nvim
 	
+	use 'yashguptaz/calvera-dark.nvim'
 	------------------------------------------
 	--		IDE Tools		--
 	------------------------------------------
@@ -105,7 +106,6 @@ require('packer').startup(function(use)
 
 	use {
 		'kristijanhusak/orgmode.nvim',				-- Orgmode
-		branch='tree-sitter',
 		config=function()
 			require('orgmode').setup({
 				org_agenda_files={'~/.config/nvim/org/agenda/**/*'},
