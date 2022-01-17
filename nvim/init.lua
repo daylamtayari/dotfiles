@@ -72,7 +72,8 @@ vim.o.laststatus=2
 vim.g.vimtex_view_method="general"
 vim.g.vimtex_view_general_viewer="okular"
 vim.g.vimtex_compiler_progname="nvr"
-
+vim.g.python3_host_prog="/usr/bin/python3"
+vim.g.formatterpath="/home/user/.local/bin/yapf"
 
 
 ---------------------------------
