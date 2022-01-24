@@ -163,6 +163,14 @@ alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/m
 
 #: }}}
 
+#: Functions {{{
+
+function copy() {
+    xclip -i $1 -sel clip
+}
+
+#: }}}
+
 #: Themeing {{{
 
 #: p10k {{{
