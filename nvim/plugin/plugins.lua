@@ -297,11 +297,11 @@ require('packer').startup(function(use)
 
     use 'folke/trouble.nvim'                    -- Diagnostics list/aggregator
     use 'folke/lsp-colors.nvim'                 -- Extra LSP colours for error messages
-    use 'dstein64/nvim-scrollview'                  -- Scroll bars
+    use 'dstein64/nvim-scrollview'              -- Scroll bars
     use 'fladson/vim-kitty'                     -- Kitty terminal syntax highlighting
 
     use {
-        'sidebar-nvim/sidebar.nvim',
+        'sidebar-nvim/sidebar.nvim',            -- Sidebar in Nvim
         rocks={'luatz'},
         config=function()
             require('sidebar-nvim').setup({
@@ -335,6 +335,11 @@ require('packer').startup(function(use)
                 },
             })
         end
+    }
+
+    use {
+        'iamcco/markdown-preview.nvim',         -- Markdown preview in the browser
+        run=[[sh -c 'cd app && yarn install']],
     }
 
 
