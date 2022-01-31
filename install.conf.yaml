@@ -17,6 +17,7 @@
         ~/.config/ranger: ranger
         ~/.config/.discocss/custom.css: discocss/custom.css
         ~/.mozilla/firefox/profile.default: firefox
+        ~/.librewolf/profile.default: firefox
 - create:
         - ~/Downloads
         - ~/Documents
