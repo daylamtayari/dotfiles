@@ -83,7 +83,7 @@
             "emerge":   "dev-lang/lua",
             "default":  "lua"
         },
-        "packages": {
+        "fzf": {
             "emerge":   "app-shells/fzf",
             "slackpkg": "",
             "default":  "fzf"
