@@ -87,6 +87,13 @@
             "emerge":   "app-shells/fzf",
             "slackpkg": "",
             "default":  "fzf"
+        },
+        "tokei": {
+            "apt":      "",
+            "emerge":   "",
+            "yum":      "",
+            "slackpkg": "",
+            "default":  "tokei"
         }
     }
 }
