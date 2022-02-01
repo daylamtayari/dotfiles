@@ -8,7 +8,7 @@ Welcome to my dotfiles, which are all of my configuration files and scripts whic
 
 1. Clone the repository.
 2. Execute the init.sh script (`chmod +x; bash init.sh`).
-3. Install all of the packages in the `dependencies.json` file (as of right now it has to be done manually but soon to be automated).
+3. Install all of the packages in the `packages.json` file (as of right now it has to be done manually but soon to be automated).
 4. Install Powerlevel 10k (soon to be automated).
 5. Reinstall Packer (either via the AUR or manually, soon to be automated).
 6. Execute the `install` script (`bash install`).
