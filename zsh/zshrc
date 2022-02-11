@@ -161,6 +161,7 @@ alias tgz="tar -xvfz"
 alias qc='qvm-copy-to-vm'
 alias qm='qvm-move-to-vm'
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
+alias timestamp='date --iso-8601=seconds'
 
 #: }}}
 
