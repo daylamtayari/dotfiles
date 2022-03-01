@@ -94,6 +94,9 @@
             "yum":      "",
             "slackpkg": "",
             "default":  "tokei"
+        },
+        "aria2": {
+            "default":  "aria2"
         }
     }
 }

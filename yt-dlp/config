@@ -1,0 +1,39 @@
+# Download options
+--concurrent-fragments 5
+--no-keep-fragments
+--downloader "dash,m3u8:native"
+--downloader aria2c
+--part
+--continue
+
+# Filename options
+--restrict-filenamees
+--output "%(title)s-%(channel)s.%(ext)s"
+
+# Verbosity options
+--quiet
+--no-warnings
+--progress
+
+# Video information options
+--write-description
+--write-info-json
+
+# Video and Audio format options
+--format "bv+ba/b"
+--audio-format best
+--audio-multistream
+--merge-output-format mkv
+
+# Subtitle options
+--sub-format srt
+--sub-langes en
+--embed-subs
+
+# Post Processing options
+--prefer-ffmpeg
+--audio-quality 0
+--embed-metadata
+--embed-chapters
+--xattrs
+--embed-thumbnail

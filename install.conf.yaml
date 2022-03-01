@@ -19,6 +19,7 @@
         ~/.mozilla/firefox/profile.default: firefox
         ~/.librewolf/profile.default: firefox
         ~/.config/xdg/mimeapps.list: mimeapps.list
+        ~/.config/yt-dlp: yt-dlp
 - create:
         - ~/Downloads
         - ~/Documents
