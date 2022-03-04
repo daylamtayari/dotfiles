@@ -96,7 +96,12 @@
             "default":  "tokei"
         },
         "aria2": {
+            "emerge":   "net-misc/aria2",
             "default":  "aria2"
+        },
+        "pavucontrol": {
+            "emerge":   "media-sound/pavucontrol",
+            "default":  "pavucontrol"
         }
     }
 }
