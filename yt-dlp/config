@@ -7,13 +7,12 @@
 --continue
 
 # Filename options
---restrict-filenamees
+--restrict-filenames
 --output "%(title)s-%(channel)s.%(ext)s"
 
 # Verbosity options
 --quiet
 --no-warnings
---progress
 
 # Video information options
 --write-description
@@ -27,13 +26,13 @@
 
 # Subtitle options
 --sub-format srt
---sub-langes en
+--sub-langs en
 --embed-subs
 
 # Post Processing options
+#--xattrs
 --prefer-ffmpeg
 --audio-quality 0
 --embed-metadata
 --embed-chapters
---xattrs
 --embed-thumbnail
