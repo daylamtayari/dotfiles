@@ -61,6 +61,9 @@ vim.o.wildmenu = true
 -- Always show the status bar:
 vim.o.laststatus = 2
 
+-- Set clipboard to the system's clipboard:
+vim.o.clipboard = "unnamedplus"
+
 ----------------------
 -- Global Variables --
 ----------------------
