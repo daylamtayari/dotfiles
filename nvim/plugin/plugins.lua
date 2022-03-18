@@ -364,7 +364,7 @@ require('packer').startup(function(use)
     use {
         'p00f/clangd_extensions.nvim',
         config=function()
-            require("clangd_extensions").setup {
+            require("clangd_extensions").setup{
                 server = {
                     -- options to pass to nvim-lspconfig
                     -- i.e. the arguments to require("lspconfig").clangd.setup({})
@@ -434,6 +434,7 @@ require('packer').startup(function(use)
                         },
                     },
                 }
+            }
             end
         }
 
