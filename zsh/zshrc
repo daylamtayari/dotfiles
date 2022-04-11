@@ -176,6 +176,8 @@ alias qc='qvm-copy-to-vm'
 alias qm='qvm-move-to-vm'
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 alias timestamp='date --iso-8601=seconds'
+alias qscs='x11vnc -viewonly -rfbauth ~/.vnc/passwd -rfbport 5901 -clip 1920x1080+0+0' # Qubes inter-Qube screensharing with VNC. Starts the VNC server.
+alias qscl='qvm-connect-tcp ::5901; vncviewer -Shared -ViewOnly -RemoteResize=0 -SendPrimary=0 -SendClipboard=0 -SetPrimary=0 127.0.0.1:5901' # Listen and connect to VNC server.
 
 #: }}}
 
