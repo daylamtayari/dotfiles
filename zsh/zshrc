@@ -193,6 +193,8 @@ function copy() {
 
 #: Themeing {{{
 
+export QT_STYLE_OVERRIDE=kvantum
+
 #: p10k {{{
 
 source ~/powerlevel10k/powerlevel10k.zsh-theme
