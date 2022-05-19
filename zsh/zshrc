@@ -187,6 +187,10 @@ alias imgdl='imgurdownloader'
 
 #: Functions {{{
 
+function ndir() {
+    mkdir $1; cd $1
+}
+
 function copy() {
     xclip -i $1 -sel clip
 }
