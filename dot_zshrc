@@ -1,0 +1,161 @@
+# vim:fileencoding=utf-8:foldmethod=marker
+
+#: ZSH Options {{{
+
+#: History Options {{{
+setopt SHARE_HISTORY            # Share history between all sessions
+setopt APPEND_HISTORY           # Append to history file
+setopt INC_APPEND_HISTORY       # Write to history incrementally
+setopt SHARE_HISTORY            # Share history between all sessions
+setopt HIST_IGNORE_DUPS         # Ignore duplicate entries in history
+setopt HIST_IGNORE_ALL_DUPS     # Remove old duplicate entires
+setopt HIST_IGNORE_SPACE        # Remove entries that start with a space
+#: }}}
+
+#: Input Options {{{
+setopt CORRECT                  # Suggest spelling suggestions
+setopt INTERACTIVE_COMMENTS     # Allow comments in the shell
+#:}}}
+
+#: }}}
+
+#: History Configuration {{{
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=100000
+#: }}}
+
+#: Environment Variables {{{
+export PATH=~/.local/bin/:~/go/bin:$PATH:~/.cargo/bin:~/.npm-global/bin:~/.pdtm/go/bin
+export EDITOR=nvim
+export VISUAL=nvim
+export QUBES_GPG_DOMAIN=gpg
+#: }}}
+
+#: Aliases {{{
+
+#: Suffix Aliases {{{
+alias -s txt=nvim
+alias -s tex=nvim
+alias -s json=jless
+alias -s md=glow
+alias -s markdown=glow
+alias -s pdf=okular
+alias -s html=firefox
+alias -s zip=unzip
+alias -s tar='tar -xvf'
+alias -s tar.gz='tar -xvzf'
+alias -s tgz='tar -xvzf'
+# Languages
+alias -s sh=bash
+alias -s bash=bash
+alias -s py=python
+alias -s rb=ruby
+alias -s ruby=ruby
+alias -s go=go
+alias -s java=javac
+alias -s class=java
+alias -s jar=java
+alias -s js=node
+alias -s lua=lua
+alias -s perl=perl
+alias -s pl=perl
+alias -s ps1=powershell
+alias -s psd1=powershell
+alias -s psm1=powershell
+# Media
+alias -s gif=nomacs
+alias -s bmp=nomacs
+alias -s ico=nomacs
+alias -s raw=nomacs
+alias -s dng=nomacs
+alias -s png=nomacs
+alias -s jpeg=nomacs
+alias -s jpg=nomacs
+alias -s svg=nomacs
+alias -s mp3=vlc
+alias -s mp4=vlc
+alias -s mkv=vlc
+alias -s mov=vlc
+alias -s flv=vlc
+alias -s mpeg=vlc
+alias -s mpg=vlc
+alias -s avi=vlc
+#: }}}
+
+#: Directory Aliases {{{
+alias ls='exa --icons'
+alias lsa='exa -a --icons'
+alias ll='exa --long --git --icons'
+alias lla='exa --long -a --git --icons'
+alias lr='exa --recurse --icons'
+alias lg='exa -lg --git --icons'
+alias lga='exa -lga --git --icons'
+alias tree='exa --tree --icons'
+alias md='mkdir -p'
+alias rd='rmdir'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+alias -g .......='../../../../../..'
+alias -g ........='../../../../../../..'
+#: }}}
+
+#: Git Aliases {{{
+alias g='git'
+alias gs='git status'
+alias gp='git push'
+alias gpl='git pull'
+alias ga='git add'
+alias gl='git log --graph --oneline --decorate'
+alias gd='git diff'
+#: }}}
+
+#: System Alt Tool Aliases {{{
+alias cat=bat
+alias du=dust
+alias df=duf
+alias top=bottom
+alias htop=bottom
+alias ps=procs
+alias ping=gping
+#: }}}
+
+#: Media Aliases {{{
+alias yt-dl='yt-dlp'
+alias ytdl='yt-dlp'
+alias ytdlp='yt-dlp'
+alias ytmp4='yt-dlp --merge-output-format mp4'
+alias ytdla='yt-dlp --extract audio'
+alias ytdlpa='yt-dlp --extract-audio'
+alias yt-dla='yt-dlp --extract-audio'
+alias yt-dlpa='yt-dlp --extract-audio'
+alias ytmp3='yt-dlp --extract-audio --audio-format mp3'
+#: }}}
+
+#: Qubes Aliases {{{
+alias qc=qvm-copy
+alias qm=qvm-move
+#: }}}
+
+#: Kitty Aliases {{{
+alias icat='kitty +kitten icat'
+alias diff='kitty +kitten diff'
+alias copy='kitty +kitten clipboard'
+#: }}}
+
+#: Miscellaneous Aliases {{{
+alias vim='nvim'
+alias grep='grep --color'
+alias ssh='kitty +kitten ssh'
+alias volume="amixer sset 'Master'"
+alias sign='gpg --detach-sign --armor'
+alias timestamp='date --iso-8601=seconds'
+alias myip='curl ipinfo.io --silent | jq -r ".ip"'
+alias lip="ifconfig | grep -e 'eth0' -e 'enX0' -A1 | tail -n1 | awk '{print \$2}' | cut -f1  -d'/'"
+alias vip="ifconfig | grep 'tun0' -A1 | tail -n1 | awk '{print \$2}' | cut -f1  -d'/'"
+alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
+#: }}}
+
+#: }}}
