@@ -1,0 +1,22 @@
+[user]
+	email= {{ .email | quote }}
+	name=Daylam Tayari
+[commit]
+	gpgSign=true
+[tag]
+	forceSignAnnotated=true
+[init]
+	defaultBranch=master
+[pull]
+	rebase=false
+[pager]
+	diff=delta
+	log=delta
+	reflog=delta
+	show=delta
+[interactive]
+	diffFilter=delta --color-only --features=interactive
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[gpg]
+	program=qubes-gpg-client-wrapper
