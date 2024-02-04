@@ -159,3 +159,7 @@ alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/m
 #: }}}
 
 #: }}}
+
+#: Miscellaneous Configurations {{{
+umask 027
+#: }}}
