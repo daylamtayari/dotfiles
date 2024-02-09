@@ -20,5 +20,7 @@
     diffFilter=delta --color-only --features=interactive
 [url "git@github.com:"]
     insteadOf = https://github.com/
+{{-if eq (output "sh" "-c" "uname -a | grep -o qubes") "qubes" -}}
 [gpg]
     program=qubes-gpg-client-wrapper
+{{- end -}}
