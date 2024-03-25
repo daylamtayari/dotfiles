@@ -17,6 +17,24 @@ setopt CORRECT                  # Suggest spelling suggestions
 setopt INTERACTIVE_COMMENTS     # Allow comments in the shell
 #:}}}
 
+#: Compinit Configuration {{{
+zstyle :compinstall filename '~/.zshrc'
+autoload -Uz compinit
+autoload edit-command-line
+autoload -U colors && colors
+zle -N edit-command-line
+compinit
+#: }}}
+
+#: }}}
+
+#: Zinit Configuration {{{
+
+#: }}}
+
+#: Shell Configuration {{{
+eval "$(zoxide init zsh)"
+alias cd = z
 #: }}}
 
 #: History Configuration {{{
