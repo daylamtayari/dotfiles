@@ -3,10 +3,8 @@
 #: ZSH Options {{{
 
 #: History Options {{{
-setopt SHARE_HISTORY            # Share history between all sessions
 setopt APPEND_HISTORY           # Append to history file
 setopt INC_APPEND_HISTORY       # Write to history incrementally
-setopt SHARE_HISTORY            # Share history between all sessions
 setopt HIST_IGNORE_DUPS         # Ignore duplicate entries in history
 setopt HIST_IGNORE_ALL_DUPS     # Remove old duplicate entires
 setopt HIST_IGNORE_SPACE        # Remove entries that start with a space
