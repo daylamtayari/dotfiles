@@ -28,13 +28,23 @@ compinit
 
 #: }}}
 
+#: Oh My Zsh Configuration {{{
+
+export ZSH="$HOME/.oh-my-zsh"
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+source $ZSH/oh-my-zsh.sh
+ZSH_THEME="powerlevel10k/powerlevel10k"
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+#: }}}
+
 #: Zinit Configuration {{{
 
 #: }}}
 
 #: Shell Configuration {{{
 eval "$(zoxide init zsh)"
-alias cd = z
+alias cd=z
 #: }}}
 
 #: History Configuration {{{
@@ -47,7 +57,6 @@ SAVEHIST=100000
 export PATH=~/.local/bin/:~/go/bin:$PATH:~/.cargo/bin:~/.npm-global/bin:~/.pdtm/go/bin
 export EDITOR=nvim
 export VISUAL=nvim
-export QUBES_GPG_DOMAIN=gpg
 #: }}}
 
 #: Aliases {{{
@@ -181,3 +190,10 @@ alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/m
 #: Miscellaneous Configurations {{{
 umask 027
 #: }}}
+
+#: Qubes Configuration {{{
+{{- if eq (output "sh" "-c" "uname -a | grep -o qubes") "qubes" -}}
+export QUBES_GPG_DOMAIN=gpg
+alias gpg=qubes-gpg-client
+{{- end -}}
+#}}}
