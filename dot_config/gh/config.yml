@@ -1,0 +1,8 @@
+version: 1
+git_protocol: ssh
+editor:   # Empty results in the environment default being used
+prompt: enabled
+aliases:
+    co: pr checkout
+http_unix_socket:
+browser:  # Empty results in the environment default being used
