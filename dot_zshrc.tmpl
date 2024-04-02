@@ -177,6 +177,8 @@ alias myip='curl ipinfo.io --silent | jq -r ".ip"'
 alias lip="ifconfig | grep -e 'eth0' -e 'enX0' -A1 | tail -n1 | awk '{print \$2}' | cut -f1  -d'/'"
 alias vip="ifconfig | grep 'tun0' -A1 | tail -n1 | awk '{print \$2}' | cut -f1  -d'/'"
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
+alias tempdir='cd $(mktemp -d)'
+alias tempfile='nvim $(mktemp)'
 #: }
 
 #: }
