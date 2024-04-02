@@ -2,6 +2,8 @@
 
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+rm ~/.zshrc
+mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 
 # Set ZSH_CUSTOM directory location
 export ZSH_CUSTOM=~/.oh-my-zsh/custom
