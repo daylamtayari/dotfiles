@@ -1,65 +1,66 @@
 # vim:fileencoding=utf-8:foldmethod=marker
 
-#: ZSH Options {{{
+#: ZSH Options {
 
-#: History Options {{{
+#: History Options {
 setopt APPEND_HISTORY           # Append to history file
 setopt INC_APPEND_HISTORY       # Write to history incrementally
 setopt HIST_IGNORE_DUPS         # Ignore duplicate entries in history
 setopt HIST_IGNORE_ALL_DUPS     # Remove old duplicate entires
 setopt HIST_IGNORE_SPACE        # Remove entries that start with a space
-#: }}}
+#: }
 
-#: Input Options {{{
+#: Input Options {
 setopt CORRECT                  # Suggest spelling suggestions
 setopt INTERACTIVE_COMMENTS     # Allow comments in the shell
-#:}}}
+#:}
 
-#: Compinit Configuration {{{
+#: Compinit Configuration {
 zstyle :compinstall filename '~/.zshrc'
 autoload -Uz compinit
 autoload edit-command-line
 autoload -U colors && colors
 zle -N edit-command-line
 compinit
-#: }}}
+#: }
 
-#: }}}
+#: }
 
-#: Oh My Zsh Configuration {{{
+#: Oh My Zsh Configuration {
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export ZSH="$HOME/.oh-my-zsh"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
-ZSH_THEME="powerlevel10k/powerlevel10k"
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-#: }}}
+#: }
 
-#: Zinit Configuration {{{
+#: Zinit Configuration {
 
-#: }}}
+#: }
 
-#: Shell Configuration {{{
+#: Shell Configuration {
 eval "$(zoxide init zsh)"
 alias cd=z
-#: }}}
+#: }
 
-#: History Configuration {{{
+#: History Configuration {
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
-#: }}}
+#: }
 
-#: Environment Variables {{{
+#: Environment Variables {
 export PATH=~/.local/bin/:~/go/bin:$PATH:~/.cargo/bin:~/.npm-global/bin:~/.pdtm/go/bin
 export EDITOR=nvim
 export VISUAL=nvim
-#: }}}
+#: }
 
-#: Aliases {{{
+#: Aliases {
 
-#: Suffix Aliases {{{
+#: Suffix Aliases {
 alias -s txt=nvim
 alias -s tex=nvim
 alias -s json=jless
@@ -106,9 +107,9 @@ alias -s flv=vlc
 alias -s mpeg=vlc
 alias -s mpg=vlc
 alias -s avi=vlc
-#: }}}
+#: }
 
-#: Directory Aliases {{{
+#: Directory Aliases {
 alias ls='exa --icons'
 alias lsa='exa -a --icons'
 alias ll='exa --long --git --icons'
@@ -125,9 +126,9 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias -g .......='../../../../../..'
 alias -g ........='../../../../../../..'
-#: }}}
+#: }
 
-#: Git Aliases {{{
+#: Git Aliases {
 alias g='git'
 alias gs='git status'
 alias gp='git push'
@@ -135,9 +136,9 @@ alias gpl='git pull'
 alias ga='git add'
 alias gl='git log --graph --oneline --decorate'
 alias gd='git diff'
-#: }}}
+#: }
 
-#: System Alt Tool Aliases {{{
+#: System Alt Tool Aliases {
 alias cat=bat
 alias du=dust
 alias df=duf
@@ -145,9 +146,9 @@ alias top=bottom
 alias htop=bottom
 alias ps=procs
 alias ping=gping
-#: }}}
+#: }
 
-#: Media Aliases {{{
+#: Media Aliases {
 alias yt-dl='yt-dlp'
 alias ytdl='yt-dlp'
 alias ytdlp='yt-dlp'
@@ -157,20 +158,15 @@ alias ytdlpa='yt-dlp --extract-audio'
 alias yt-dla='yt-dlp --extract-audio'
 alias yt-dlpa='yt-dlp --extract-audio'
 alias ytmp3='yt-dlp --extract-audio --audio-format mp3'
-#: }}}
+#: }
 
-#: Qubes Aliases {{{
-alias qc=qvm-copy
-alias qm=qvm-move
-#: }}}
-
-#: Kitty Aliases {{{
+#: Kitty Aliases {
 alias icat='kitty +kitten icat'
 alias diff='kitty +kitten diff'
 alias copy='kitty +kitten clipboard'
-#: }}}
+#: }
 
-#: Miscellaneous Aliases {{{
+#: Miscellaneous Aliases {
 alias vim='nvim'
 alias grep='grep --color'
 alias ssh='kitty +kitten ssh'
@@ -181,17 +177,20 @@ alias myip='curl ipinfo.io --silent | jq -r ".ip"'
 alias lip="ifconfig | grep -e 'eth0' -e 'enX0' -A1 | tail -n1 | awk '{print \$2}' | cut -f1  -d'/'"
 alias vip="ifconfig | grep 'tun0' -A1 | tail -n1 | awk '{print \$2}' | cut -f1  -d'/'"
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
-#: }}}
+#: }
 
-#: }}}
+#: }
 
-#: Miscellaneous Configurations {{{
+#: Miscellaneous Configurations {
 umask 027
-#: }}}
+#: }
 
-#: Qubes Configuration {{{
-{{- if eq (output "sh" "-c" "uname -a | grep -o qubes") "qubes" -}}
+#: Qubes Configuration {
+{{ if eq (output "sh" "-c" "uname -a | grep -o qubes | tr -d '\n'") "qubes" }}
 export QUBES_GPG_DOMAIN=gpg
 alias gpg=qubes-gpg-client
-{{- end -}}
-#}}}
+
+alias qc=qvm-copy
+alias qm=qvm-move
+{{ end }}
+#}
