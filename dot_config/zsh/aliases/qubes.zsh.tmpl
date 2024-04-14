@@ -1,0 +1,8 @@
+# Qubes Aliases
+
+{{ if eq (output "sh" "-c" "uname -a | grep -o qubes | tr -d '\n'") "qubes" }}
+alias gpg=qubes-gpg-client
+
+alias qc=qvm-copy
+alias qm=qvm-move
+{{ end }}
