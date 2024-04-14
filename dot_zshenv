@@ -21,6 +21,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 export GOPATH="${HOME}/go"
 
-# Encodings, languges and misc settings
+# Locale
 export LANG="en_US.UTF-8";
 export LC_ALL="C";
