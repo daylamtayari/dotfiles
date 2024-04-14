@@ -12,15 +12,29 @@ export PAGER="bat"
 export TERMINAL="kitty"
 export BROWSER="firefox"
 
-## Configuration Directories
+# Configuration Directories
 export CURL_HOME="${XDG_CONFIG_HOME}/curl"
 export WGETRC="${XDG_CONFIG_HOME}/wget/.wgetrc"
 export PYENV_ROOT="$HOME/.pyenv"
 
-## Dependency Directories
+# Dependency Directories
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 export GOPATH="${HOME}/go"
+
+# Binary Directories
+export CARGO_BIN="${CARGO_HOME}/bin"
+export GO_BIN="${GOPATH}/bin"
+export LOCAL_BIN="${HOME}/.local/bin"
+export PDTM_BIN="{$HOME}/.pdtm/go/bin"
+
+# Path
+export PATH=$LOCAL_BIN:$PATH:$CARGO_BIN:$GO_BIN:$PDTM_BIN
 
 # Locale
 export LANG="en_US.UTF-8";
 export LC_ALL="C";
+{{ if eq (output "sh" "-c" "uname -a | grep -o qubes | tr -d '\n'") "qubes" }}
+
+# Qubes
+export QUBES_GPG_DOMAIN=gpg
+{{ end }}
