@@ -42,9 +42,12 @@ HISTSIZE=100000
 SAVEHIST=100000
 
 # Miscellaneous Configuration
+export TERM=xterm-256color
 umask 027
 
-# Source ZSH Aliases
+# Source ZSH Configuration Files
+
+## ZSH Aliases
 if [[ -d $zsh_dir ]]; then
   # Import alias files
   source ${zsh_dir}/aliases/kitty.zsh
@@ -57,3 +60,6 @@ if [[ -d $zsh_dir ]]; then
   source ${zsh_dir}/aliases/ytdl.zsh
   source ${zsh_dir}/aliases/qubes.zsh
 fi
+
+## Functions
+source ${zsh_dir}/functions.zsh
