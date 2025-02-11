@@ -1,0 +1,38 @@
+packages:
+  arch:
+    official:
+    # Core
+    - git
+    - kitty
+    - neovim
+    - zsh
+    # Utilities
+    - bat
+    - bottom
+    - duf
+    - dust
+    - erdtree
+    - eza
+    - fd
+    - ffmpeg
+    - fzf
+    - git-delta
+    - igrep
+    - imagemagick
+    - jq
+    - neofetch
+    - onefetch
+    - pavucontrol
+    - procs
+    - ranger
+    - ripgrep
+    - sd
+    - tokei
+    - wget
+    # Applications
+    - firefox
+    - okkular
+    # Languages
+    - go
+    - lua
+    aur:

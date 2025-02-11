@@ -1,0 +1,11 @@
+{{ if eq .chezmoi.osRelease.id "arch" -}}
+#!/bin/bash
+
+{{ range .packages.arch.official -}}
+sudo pacman -S --noconfirm --needed {{ . | join " " }}
+{{ end -}}
+{{ range .packages.arch.aur -}}
+paru -S --noconfirm --needed {{ . | join " " }}
+{{ end -}}
+
+{{ end -}}
