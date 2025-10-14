@@ -15,6 +15,6 @@ alias ls="exa --icons"
 alias lsa="exa -a --icons"
 alias ping=gping
 alias ps=procs
-alias top=btm
+alias top=btop
 alias tree="exa --tree --icons"
 alias vim=nvim

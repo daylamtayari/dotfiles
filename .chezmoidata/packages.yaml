@@ -8,7 +8,7 @@ packages:
     - zsh
     # Utilities
     - bat
-    - bottom
+    - btop
     - duf
     - dust
     - erdtree
