@@ -66,3 +66,8 @@ fi
 
 ## Functions
 source ${zsh_dir}/functions.zsh
+
+# Pyenv Configuration
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)
