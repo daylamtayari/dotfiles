@@ -1,0 +1,34 @@
+# XDG Directories
+
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_BIN_HOME="${HOME}/.local/bin"
+export XDG_LIB_HOME="${HOME}/.local/lib"
+export XDG_CACHE_HOME="${HOME}/.cache"
+
+# Default Applications
+export EDITOR="nvim"
+export VISUAL="nvim"
+export PAGER="bat"
+export TERMINAL="kitty"
+export BROWSER="firefox"
+
+# Configuration Directories
+export CURL_HOME="${XDG_CONFIG_HOME}/curl"
+export WGETRC="${XDG_CONFIG_HOME}/wget/wgetrc"
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+
+# Dependency Directories
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export GOPATH="${HOME}/go"
+
+# Binary Directories
+export CARGO_BIN="${CARGO_HOME}/bin"
+export GO_BIN="${GOPATH}/bin"
+
+# Path
+export PATH=$PATH:$XDG_BIN_HOME:$CARGO_BIN:$GO_BIN
+
+# Locale
+export LANG="en_US.UTF-8"
+export LC_ALL="C"
