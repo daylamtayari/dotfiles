@@ -41,7 +41,7 @@ return {
 			-- Be aware that you also will need to properly configure your LSP server to
 			-- provide the code lenses.
 			codelens = {
-				enabled = false,
+				enabled = true,
 			},
 			-- add any global capabilities here
 			capabilities = {
@@ -204,7 +204,7 @@ return {
 		local have_mason, mlsp = pcall(require, "mason-lspconfig")
 		local all_mslp_servers = {}
 		if have_mason then
-			all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
+			all_mslp_servers = vim.tbl_keys(mlsp.get_mappings().lspconfig_to_package)
 		end
 
 		local ensure_installed = {} ---@type string[]
