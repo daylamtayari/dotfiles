@@ -24,24 +24,12 @@ require("lazy").setup({
 			colorscheme = "gruvbox",
 		},
 	},
-	{
-		"NvChad/NvChad",
-		lazy = false,
-		branch = "v2.5",
-		import = "nvchad.plugins",
-		config = function()
-			require("options")
-		end,
-	},
-
 	{ import = "plugins" },
 }, lazy_config)
 
 -- load theme
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
-
-require("nvchad.autocmds")
 
 vim.schedule(function()
 	require("mappings")
