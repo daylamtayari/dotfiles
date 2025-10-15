@@ -2,7 +2,7 @@ return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
 		"mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
+		"mason-org/mason-lspconfig.nvim",
 	},
 	---@class PluginLspOpts
 	opts = function()
@@ -224,6 +224,7 @@ return {
 
 		if have_mason then
 			mlsp.setup({
+				automatic_installation = true,
 				ensure_installed = vim.tbl_deep_extend(
 					"force",
 					ensure_installed,
