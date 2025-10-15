@@ -116,7 +116,7 @@ return {
 		-- setup keymaps
 		LazyVim.lsp.on_attach(function(client, buffer)
 			require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
-			client.server_capabilities.documentHighlightProvider = true
+			-- client.server_capabilities.documentHighlightProvider = true
 		end)
 
 		LazyVim.lsp.setup()
