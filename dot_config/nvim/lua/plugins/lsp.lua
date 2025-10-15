@@ -234,7 +234,7 @@ return {
 			})
 		end
 
-		if LazyVim.lsp.is_enabled("denols") and LazyVim.lsp.is_enabled("vtsls") then
+		if opts.servers["denols"] and opts.servers["vtsls"] then
 			local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
 			LazyVim.lsp.disable("vtsls", is_deno)
 			LazyVim.lsp.disable("denols", function(root_dir)
