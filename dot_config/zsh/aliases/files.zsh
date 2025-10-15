@@ -10,4 +10,4 @@ alias -g ........="../../../../../../.."
 
 # Temporary File and Directory Aliases
 alias tempdir="cd $(mktemp -d)"
-alias tempfile="nvim $(mktemp)"
+alias tempfile="$EDITOR $(mktemp)"
