@@ -2,8 +2,11 @@
 #!/bin/bash
 
 sudo pacman -S --needed base-devel
+
+{{ if not (lookPath "paru") -}}
 git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
+{{ end -}}
 
 {{ end -}}
