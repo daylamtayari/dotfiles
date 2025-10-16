@@ -51,17 +51,10 @@ umask 027
 # Source ZSH Configuration Files
 
 ## ZSH Aliases
-if [[ -d $zsh_dir ]]; then
-  # Import alias files
-  source ${zsh_dir}/aliases/kitty.zsh
-  source ${zsh_dir}/aliases/files.zsh
-  source ${zsh_dir}/aliases/suffixes.zsh
-  source ${zsh_dir}/aliases/utilities.zsh
-  source ${zsh_dir}/aliases/network.zsh
-  source ${zsh_dir}/aliases/tips.zsh
-  source ${zsh_dir}/aliases/git.zsh
-  source ${zsh_dir}/aliases/ytdl.zsh
-  source ${zsh_dir}/aliases/qubes.zsh
+if [[ -d $zsh_dir/aliases ]]; then
+  for alias_file in ${zsh_dir}/aliases/*.zsh; do
+    source "$alias_file"
+  done
 fi
 
 ## Functions
