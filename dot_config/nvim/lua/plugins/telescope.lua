@@ -1,8 +1,9 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
+		lazy = false,
 		opts = function()
-			local conf = require("nvchad.configs.telescope")
+			local conf = require(".configs.telescope")
 
 			conf.defaults.mappings.i = {
 				["<C-j>"] = require("telescope.actions").move_selection_next,

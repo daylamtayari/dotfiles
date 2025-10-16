@@ -5,6 +5,7 @@ return {
 			require("base46").load_all_highlights()
 		end,
 	},
+	"nvchad/nvchad",
 	{
 		"nvchad/ui",
 		lazy = false,

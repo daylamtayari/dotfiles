@@ -2,6 +2,8 @@ return {
 	defaults = { lazy = true },
 	install = { colorscheme = { "gruvbox" } },
 
+	colorscheme = "gruvbox",
+
 	ui = {
 		icons = {
 			ft = "",
