@@ -53,6 +53,9 @@ map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
 
+-- outline
+map("n", "<C-o>", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
+
 -- telescope
 map("n", "<leader>fg", LazyVim.pick("live_grep"), { desc = "live grep" })
 map("n", "<leader>fb", LazyVim.pick("buffers"), { desc = "find buffers" })
