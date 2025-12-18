@@ -71,3 +71,6 @@ vim.o.ignorecase = true
 
 --Enable tab completion in command mode:
 vim.o.wildmenu = true
+
+-- Remove underscore from word
+vim.opt.iskeyword:remove("_")
