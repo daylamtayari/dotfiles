@@ -24,7 +24,7 @@ return {
 			},
 			lualine_c = {
 				{ "filetype", icon_only = true },
-				"filename",
+				{ "filename", path = 1 },
 				{
 					"diagnostics",
 					sources = { "nvim_lsp" },
