@@ -113,14 +113,7 @@ return {
 		-- setup autoformat
 		LazyVim.format.register(LazyVim.lsp.formatter())
 
-		-- setup keymaps
-		LazyVim.lsp.on_attach(function(client, buffer)
-			require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
-			-- client.server_capabilities.documentHighlightProvider = true
-		end)
-
-		LazyVim.lsp.setup()
-		LazyVim.lsp.on_dynamic_capability(require("lazyvim.plugins.lsp.keymaps").on_attach)
+		-- LSP keymaps are now automatically set up by LazyVim
 
 		-- diagnostics signs
 		if vim.fn.has("nvim-0.10.0") == 0 then
@@ -136,25 +129,29 @@ return {
 		if vim.fn.has("nvim-0.10") == 1 then
 			-- inlay hints
 			if opts.inlay_hints.enabled then
-				LazyVim.lsp.on_supports_method("textDocument/inlayHint", function(client, buffer)
-					if
-						vim.api.nvim_buf_is_valid(buffer)
-						and vim.bo[buffer].buftype == ""
-						and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
-					then
-						Snacks.toggle.inlay_hints(buffer, true)
+				Snacks.util.lsp.on(function(buffer, client)
+					if client.supports_method("textDocument/inlayHint") then
+						if
+							vim.api.nvim_buf_is_valid(buffer)
+							and vim.bo[buffer].buftype == ""
+							and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
+						then
+							Snacks.toggle.inlay_hints(buffer, true)
+						end
 					end
 				end)
 			end
 
 			-- code lens
 			if opts.codelens.enabled and vim.lsp.codelens then
-				LazyVim.lsp.on_supports_method("textDocument/codeLens", function(client, buffer)
-					vim.lsp.codelens.refresh()
-					vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-						buffer = buffer,
-						callback = vim.lsp.codelens.refresh,
-					})
+				Snacks.util.lsp.on(function(buffer, client)
+					if client.supports_method("textDocument/codeLens") then
+						vim.lsp.codelens.refresh()
+						vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+							buffer = buffer,
+							callback = vim.lsp.codelens.refresh,
+						})
+					end
 				end)
 			end
 		end
