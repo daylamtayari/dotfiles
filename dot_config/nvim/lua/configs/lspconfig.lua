@@ -7,8 +7,8 @@ M.on_attach = function(_, bufnr)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
-  map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
-  map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
+  map("n", "gD", "<cmd>Telescope lsp_declarations<CR>", opts "Go to declaration")
+  map("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts "Go to definition")
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
   map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
 
