@@ -27,6 +27,8 @@ end, { desc = "general format file" })
 
 -- global lsp mappings
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
+map("n", "gr", "<cmd>Telescope lsp_references<CR>", { desc = "LSP references" })
+map("n", "gI", "<cmd>Telescope lsp_implementations<CR>", { desc = "LSP implementations" })
 
 -- tabufline
 if require("chadrc").ui.tabufline.enabled then
