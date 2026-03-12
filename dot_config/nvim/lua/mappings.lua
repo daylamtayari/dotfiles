@@ -26,7 +26,8 @@ map({ "n", "x" }, "<leader>fm", function()
 end, { desc = "general format file" })
 
 -- global lsp mappings
-map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
+map("n", "<leader>ds", "<cmd>Telescope diagnostics bufnr=0<CR>", { desc = "LSP document diagnostics" })
+map("n", "<leader>dS", "<cmd>Telescope diagnostics<CR>", { desc = "LSP workspace diagnostics" })
 map("n", "gr", "<cmd>Telescope lsp_references<CR>", { desc = "LSP references" })
 map("n", "gI", "<cmd>Telescope lsp_implementations<CR>", { desc = "LSP implementations" })
 
