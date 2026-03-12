@@ -2,7 +2,15 @@ return {
 	"hedyhli/outline.nvim",
 	config = function()
 		require("outline").setup({
-			-- Your setup opts here (leave empty to use defaults)
+			providers = {
+				priority = { "lsp", "coc", "markdown", "norg" },
+				lsp = {
+					blacklist_clients = {},
+				},
+				markdown = {
+					filetypes = { "markdown" },
+				},
+			},
 		})
 	end,
 }
