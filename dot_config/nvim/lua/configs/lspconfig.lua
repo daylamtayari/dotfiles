@@ -18,6 +18,15 @@ M.on_attach = function(_, bufnr)
 
   map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
   map("n", "<leader>ra", require "nvchad.lsp.renamer", opts "NvRenamer")
+
+  -- Hover documentation
+  map("n", "K", function()
+    vim.lsp.buf.hover({ border = "rounded", focusable = false })
+  end, opts "Show hover documentation")
+
+  -- Signature help
+  map("n", "gK", vim.lsp.buf.signature_help, opts "Show signature help")
+  map("i", "<C-s>", vim.lsp.buf.signature_help, opts "Show signature help")
 end
 
 -- disable semanticTokens
