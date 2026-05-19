@@ -61,7 +61,7 @@
       htmlq
       csvkit
       csvlens
-      xsv
+            #xsv
       lighttpd
       android-tools
       powershell
