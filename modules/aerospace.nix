@@ -8,8 +8,9 @@
 {
   programs.aerospace = lib.mkIf pkgs.stdenv.isDarwin {
     enable = true;
-    # Autostart is handled by `start-at-login` inside the TOML; switch to
-    # launchd.enable if the login-item approach proves flaky under Nix.
+    # The TOML sets `start-at-login = true`; the module requires that to be
+    # backed by a launchd agent, so launchd.enable must be true to match.
+    launchd.enable = true;
     settings = builtins.fromTOML (builtins.readFile ../config/aerospace/aerospace.toml);
   };
 
