@@ -8,12 +8,12 @@
 {
   home.packages = with pkgs; [
     firefox
-    nomacs # image viewer
     obsidian # unfree
   ]
   ++ lib.optionals stdenv.isLinux [
     ungoogled-chromium
     vlc
+    nomacs # image viewer
     kdePackages.okular # PDF viewer
     libreoffice-fresh
     pavucontrol # audio control
