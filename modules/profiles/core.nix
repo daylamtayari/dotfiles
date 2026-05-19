@@ -43,7 +43,7 @@
     bottom # btm
     htop
     duf
-    du-dust # dust
+    dust # dust
     procs
     erdtree # erd
     # Networking
