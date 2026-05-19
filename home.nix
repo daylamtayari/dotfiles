@@ -18,6 +18,8 @@
     ./modules/kitty.nix
     ./modules/ranger.nix
     ./modules/nvim.nix
+    ./modules/gh.nix
+    ./modules/misc.nix
 
     # Qubes glue — always imported so `my.host.qubes` exists everywhere;
     # enabled per host (see hosts/*.nix).

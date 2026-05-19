@@ -58,6 +58,9 @@
     "zsh/aliases".source = ../config/zsh/aliases;
     "zsh/functions.zsh".source = ../config/zsh/functions.zsh;
     "zsh/p10k.zsh".source = ../config/zsh/p10k.zsh;
+
+    # wget — config kept alongside the WGETRC export above (no HM module).
+    "wget/wgetrc".source = ../config/wget/wgetrc;
   };
 
   programs.zsh = {
