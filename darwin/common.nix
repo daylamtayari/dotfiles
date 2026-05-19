@@ -43,6 +43,7 @@
       "1password"
       "spotify" # work.nix — nixpkgs package is Linux-only
       "altair-graphql-client" # dev.nix — nixpkgs altair is x86_64-linux only
+      "dash" # dev.nix — macOS counterpart to zeal (Zeal has no macOS build)
       "veracrypt" # security.nix — nixpkgs package is Linux-only
       "bloodhound" # security.nix — Linux-only; cask is deprecated upstream
       # Nerd Font for kitty's font_family + the nvim / ranger devicons

@@ -71,7 +71,6 @@
       vscodium
       mongodb-compass # unfree
       drawio
-      zeal # offline API docs
       bruno # API client
       # Remote access
       remmina
@@ -82,14 +81,15 @@
       inetutils
       ipinfo
     ]
-    # Linux-only in nixpkgs — excluded on macOS. checksec / altair have
-    # Homebrew equivalents (darwin/common.nix); net-tools / cifs-utils do not
-    # (macOS ships its own BSD networking + native SMB).
+    # Linux-only — excluded on macOS. checksec / altair have Homebrew
+    # equivalents (darwin/common.nix); net-tools / cifs-utils (macOS has BSD
+    # equivalents) and zeal (no macOS build at all) do not.
     ++ lib.optionals stdenv.isLinux [
       net-tools
       cifs-utils
       checksec
       altair # nixpkgs altair (GraphQL client) is x86_64-linux only
+      zeal # Linux/Windows only; Dash is the macOS counterpart
     ];
   };
 }
