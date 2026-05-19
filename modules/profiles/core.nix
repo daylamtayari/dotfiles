@@ -14,7 +14,7 @@
 
   home.packages = with pkgs; [
     # Archives
-    _7zip
+    _7zip-zstd
     atool
     unzip
     unrar # unfree

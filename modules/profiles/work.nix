@@ -12,6 +12,7 @@
   config = lib.mkIf config.my.profiles.work.enable {
     home.packages = with pkgs; [
       super-productivity
+      spotify
     ];
   };
 }
