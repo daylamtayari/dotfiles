@@ -24,6 +24,7 @@
     ./modules/profiles/dev.nix
     ./modules/profiles/security.nix
     ./modules/profiles/pers.nix
+    ./modules/profiles/work.nix
     ./modules/profiles/i3.nix
   ];
 

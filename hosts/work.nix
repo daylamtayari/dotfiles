@@ -10,4 +10,5 @@
 
   my.profiles.dev.enable = true;
   my.profiles.security.enable = true;
+  my.profiles.work.enable = true;
 }

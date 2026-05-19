@@ -47,7 +47,7 @@ Replace chezmoi as the dotfile *and* package manager with a single Nix flake so 
 |---|---|---|---|
 | `dev` | Qubes VM running Arch | standalone HM | **Pilot host.** Qubes GPG glue. |
 | `cyber` | Qubes VM running Arch | standalone HM | Qubes GPG glue; `security` profile. |
-| `work` | work macOS | nix-darwin + HM | `dev` + `security` profiles; GUI apps via Homebrew. |
+| `work` | work macOS | nix-darwin + HM | `dev` + `security` + `work` profiles; GUI apps via Homebrew. |
 
 Flake names are arbitrary labels for `home-manager switch --flake .#<name>`;
 they do **not** need to match the system `hostname`.
@@ -103,6 +103,7 @@ Each Qubes host (`dev`, `cyber`) then owns an independent, persistent store.
 │       ├── dev.nix                  # dev toolchain (my.profiles.dev)
 │       ├── security.nix             # cyber toolkit (my.profiles.security)
 │       ├── pers.nix                 # personal apps (my.profiles.pers)
+│       ├── work.nix                 # work apps (my.profiles.work)
 │       └── i3.nix                   # i3 + rofi + polybar (my.profiles.i3) — scaffold
 ├── hosts/
 │   ├── dev.nix                      # Qubes VM (Arch)
@@ -218,14 +219,27 @@ reads the commit email from `$GIT_EMAIL` so it is never committed to the repo.
 
 ### Phase 5 — Add macOS (`work`)
 
-1. Add the `nix-darwin` input to `flake.nix`.
-2. Install Nix on the `work` Mac (Determinate installer), then nix-darwin.
-3. `darwin/common.nix` — shared nix-darwin system config: `homebrew.casks`,
-   `system.keyboard` remaps, etc.
-4. `darwinConfigurations.work` wires `darwin/common.nix` +
-   `home-manager.darwinModules.home-manager` + `home.nix` + `hosts/work.nix`.
-5. Verify shell/git/nvim/tools on `work`
-   (`darwin-rebuild switch --flake .#work --impure`).
+Repo side (done): `nix-darwin` + `nix-homebrew` inputs, `darwin/common.nix`,
+`darwinConfigurations.work`, `hosts/work.nix`, `modules/aerospace.nix`.
+
+Host setup on the `work` Mac (manual). Apple Silicon is assumed — for an Intel
+Mac set `nixpkgs.hostPlatform = "x86_64-darwin"` in `darwin/common.nix` first.
+
+1. Install Nix — Determinate installer (enables flakes; `nix.enable = false`
+   in the config expects Determinate to own Nix):
+   `curl -fsSL https://install.determinate.systems/nix | sh -s -- install`
+   Then open a new terminal.
+2. Clone this repo to `~/.local/share/chezmoi` and `git checkout nix`.
+   (First `git` run prompts to install the Xcode Command Line Tools — accept.)
+3. Bootstrap nix-darwin — also installs Homebrew (via nix-homebrew) and the
+   casks:
+   `sudo GIT_EMAIL=<you> nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work --impure`
+4. Subsequent rebuilds:
+   `sudo GIT_EMAIL=<you> darwin-rebuild switch --flake .#work --impure`
+
+`sudo` is required (system changes); `GIT_EMAIL` is passed *through* sudo so
+`git.nix` sees it; `--impure` is required (the flake reads `$GIT_EMAIL` and,
+for the account name, `$SUDO_USER`).
 
 ### Phase 6 — Decommission chezmoi
 
@@ -302,14 +316,16 @@ name is sourced from `$USER` at switch time (impure), so it needs no entry.
 - [x] **Phase 5** — macOS `work` host wired (repo side): `nix-darwin` +
       `nix-homebrew` inputs, `darwinConfigurations.work`, `darwin/common.nix`
       (Homebrew casks raycast/slack/zoom/1password, Cmd/Option/Fn keymap),
-      `hosts/work.nix` (dev + security profiles), `modules/aerospace.nix`
+      `hosts/work.nix` (dev + security + work profiles), `modules/aerospace.nix`
       (config + bring-workspace.sh from `config/aerospace/`). Remaining is
       host-side/manual — install Nix + nix-darwin on the Mac, then
-      `darwin-rebuild switch --flake .#work --impure`.
+      `sudo GIT_EMAIL=… darwin-rebuild switch --flake .#work --impure` (the
+      Phase 5 section has the full runbook).
 - [x] **Phase 6** — chezmoi decommissioned early: all 13 chezmoi source files
       removed, the repo is now a pure Nix flake. Still pending: uninstall the
       `chezmoi` binary per host, and clear the local `.git/` dotbot-era
       submodule cruft (step 2 above).
 - [x] **Phase 7** — profiles populated: `core`, `core-gui`, `dev`, `pers` from
-      the `dev` VM and `security` from the `cyber` VM. The `i3` profile is
-      scaffolded for later. (Work GUI apps are Homebrew casks, not a profile.)
+      the `dev` VM, `security` from the `cyber` VM, and `work` (Super
+      Productivity; the GUI apps slack/zoom/1Password are Homebrew casks). The
+      `i3` profile is scaffolded for later.
