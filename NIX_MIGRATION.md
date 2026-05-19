@@ -233,13 +233,15 @@ Mac set `nixpkgs.hostPlatform = "x86_64-darwin"` in `darwin/common.nix` first.
    (First `git` run prompts to install the Xcode Command Line Tools — accept.)
 3. Bootstrap nix-darwin — also installs Homebrew (via nix-homebrew) and the
    casks:
-   `sudo GIT_EMAIL=<you> nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work --impure`
+   `sudo -H GIT_EMAIL=<you> nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work --impure`
 4. Subsequent rebuilds:
-   `sudo GIT_EMAIL=<you> darwin-rebuild switch --flake .#work --impure`
+   `sudo -H GIT_EMAIL=<you> darwin-rebuild switch --flake .#work --impure`
 
-`sudo` is required (system changes); `GIT_EMAIL` is passed *through* sudo so
-`git.nix` sees it; `--impure` is required (the flake reads `$GIT_EMAIL` and,
-for the account name, `$SUDO_USER`).
+`sudo` is required (system changes); `-H` gives root its own `$HOME`
+(`/var/root`) so Nix does not warn that `$HOME` is not owned by the running
+user; `GIT_EMAIL` is passed *through* sudo so `git.nix` sees it; `--impure` is
+required (the flake reads `$GIT_EMAIL` and, for the account name,
+`$SUDO_USER`).
 
 ### Phase 6 — Decommission chezmoi
 
@@ -319,7 +321,7 @@ name is sourced from `$USER` at switch time (impure), so it needs no entry.
       `hosts/work.nix` (dev + security + work profiles), `modules/aerospace.nix`
       (config + bring-workspace.sh from `config/aerospace/`). Remaining is
       host-side/manual — install Nix + nix-darwin on the Mac, then
-      `sudo GIT_EMAIL=… darwin-rebuild switch --flake .#work --impure` (the
+      `sudo -H GIT_EMAIL=… darwin-rebuild switch --flake .#work --impure` (the
       Phase 5 section has the full runbook).
 - [x] **Phase 6** — chezmoi decommissioned early: all 13 chezmoi source files
       removed, the repo is now a pure Nix flake. Still pending: uninstall the

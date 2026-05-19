@@ -41,16 +41,18 @@
   # Modifier-key remap for the bottom-left key cluster. Physical
   # fn|ctrl|option|command is remapped to send command|ctrl|fn|option, so
   # AeroSpace's `alt` (Option) mod sits under the thumb. See the header of
-  # config/aerospace/aerospace.toml for the rationale. Integers are IOKit HID
-  # usage codes (Nix hex literals):
-  #   fn / globe 0xFF00000003   control 0x7000000E0
-  #   option     0x7000000E2    command 0x7000000E3
+  # config/aerospace/aerospace.toml for the rationale. Values are IOKit HID
+  # usage codes as decimal integers (Nix has no hex literal):
+  #   fn / globe  0xFF00000003 = 1095216660483
+  #   control     0x7000000E0  = 30064771296
+  #   option      0x7000000E2  = 30064771298
+  #   command     0x7000000E3  = 30064771299
   system.keyboard = {
     enableKeyMapping = true;
     userKeyMapping = [
-      { HIDKeyboardModifierMappingSrc = 0xFF00000003; HIDKeyboardModifierMappingDst = 0x7000000E3; } # fn → command
-      { HIDKeyboardModifierMappingSrc = 0x7000000E2; HIDKeyboardModifierMappingDst = 0xFF00000003; } # option → fn
-      { HIDKeyboardModifierMappingSrc = 0x7000000E3; HIDKeyboardModifierMappingDst = 0x7000000E2; } # command → option
+      { HIDKeyboardModifierMappingSrc = 1095216660483; HIDKeyboardModifierMappingDst = 30064771299; } # fn → command
+      { HIDKeyboardModifierMappingSrc = 30064771298; HIDKeyboardModifierMappingDst = 1095216660483; } # option → fn
+      { HIDKeyboardModifierMappingSrc = 30064771299; HIDKeyboardModifierMappingDst = 30064771298; } # command → option
     ];
   };
 
