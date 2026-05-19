@@ -1,19 +1,21 @@
 # modules/profiles/core-gui.nix — base GUI applications.
 #
-# Unconditional, but Linux-only: on macOS these come from Homebrew casks
-# (darwin/*.nix, Phase 5), so the list is guarded. General-purpose GUI apps
-# wanted on every host.
+# Split: packages with native macOS nixpkgs builds (firefox / nomacs / obsidian)
+# are unconditional; the rest are Linux-only, and macOS picks up the ones it
+# needs as Homebrew casks in darwin/common.nix (vlc, ungoogled-chromium).
 { pkgs, lib, ... }:
 
 {
-  home.packages = lib.optionals pkgs.stdenv.isLinux (with pkgs; [
+  home.packages = with pkgs; [
     firefox
+    nomacs # image viewer
+    obsidian # unfree
+  ]
+  ++ lib.optionals stdenv.isLinux [
     ungoogled-chromium
     vlc
-    nomacs # image viewer
     kdePackages.okular # PDF viewer
     libreoffice-fresh
-    obsidian # unfree
     pavucontrol # audio control
-  ]);
+  ];
 }

@@ -67,7 +67,6 @@
       texliveFull # large — swap for texlive.combined.scheme-medium if not all needed
       # GUI developer tools
       dbeaver-bin
-      jetbrains.idea-oss
       vscodium
       mongodb-compass # unfree
       drawio

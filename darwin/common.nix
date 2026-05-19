@@ -32,16 +32,15 @@
   homebrew = {
     enable = true;
     brews = [
-      "checksec" # dev.nix — nixpkgs package is Linux-only
       "ike-scan" # security.nix — nixpkgs package is Linux-only
       "dependency-check" # not in nixpkgs at all
     ];
     casks = [
       "raycast"
       "slack"
-      "zoom"
-      "1password"
       "spotify" # work.nix — nixpkgs package is Linux-only
+      "vlc" # core-gui.nix — nixpkgs vlc skipped on macOS
+      "ungoogled-chromium" # core-gui.nix — nixpkgs chromium skipped on macOS
       "altair-graphql-client" # dev.nix — nixpkgs altair is x86_64-linux only
       "dash" # dev.nix — macOS counterpart to zeal (Zeal has no macOS build)
       "veracrypt" # security.nix — nixpkgs package is Linux-only
