@@ -16,7 +16,7 @@
   config = lib.mkIf config.my.host.qubes {
     # Sign git commits/tags through the split-GPG client wrapper instead of a
     # local gpg binary (ported from the Qubes branch of dot_gitconfig.tmpl).
-    programs.git.extraConfig.gpg.program = "qubes-gpg-client-wrapper";
+    programs.git.settings.gpg.program = "qubes-gpg-client-wrapper";
 
     # Backend qube that holds the GPG private keys.
     home.sessionVariables.QUBES_GPG_DOMAIN = "gpg";
