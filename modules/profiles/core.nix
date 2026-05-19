@@ -9,8 +9,10 @@
 { pkgs, lib, ... }:
 
 {
-  # Make Home Manager-installed fonts visible to applications (Linux).
-  fonts.fontconfig.enable = true;
+  # fontconfig — Linux only. The font packages below are Linux-only too, so on
+  # macOS there is nothing for it to do; disabling it keeps anything
+  # font-related out of the darwin evaluation.
+  fonts.fontconfig.enable = pkgs.stdenv.isLinux;
 
   home.packages = with pkgs; [
     # Archives
