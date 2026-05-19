@@ -10,6 +10,9 @@
   home.username = "user";
   home.homeDirectory = "/home/user";
 
-  # Phase 3 will enable per-host toolchain profiles here, e.g.:
-  # my.profiles.dev.enable = true;
+  # Qubes AppVM — use split-GPG and the inter-VM aliases (modules/qubes.nix).
+  my.host.qubes = true;
+
+  # Development toolchain (modules/profiles/dev.nix).
+  my.profiles.dev.enable = true;
 }

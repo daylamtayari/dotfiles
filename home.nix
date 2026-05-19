@@ -12,16 +12,20 @@
 {
   imports = [
     # Phase 2 — core modules:
-    # ./modules/tools.nix
-    # ./modules/git.nix
-    # ./modules/shell.nix
-    # ./modules/kitty.nix
-    # ./modules/ranger.nix
-    # ./modules/nvim.nix
+    ./modules/tools.nix
+    ./modules/git.nix
+    ./modules/shell.nix
+    ./modules/kitty.nix
+    ./modules/ranger.nix
+    ./modules/nvim.nix
 
-    # Phase 3 — profile flag modules (always imported; enabled per host):
-    # ./modules/profiles/dev.nix
-    # ./modules/profiles/security.nix
+    # Qubes glue — always imported so `my.host.qubes` exists everywhere;
+    # enabled per host (see hosts/*.nix).
+    ./modules/qubes.nix
+
+    # Profile flag modules (always imported; enabled per host):
+    ./modules/profiles/dev.nix
+    # Phase 3 — ./modules/profiles/security.nix
   ];
 
   home.stateVersion = "25.11";

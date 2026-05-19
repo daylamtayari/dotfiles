@@ -4,7 +4,7 @@ alias cat=bat
 alias cd=z
 alias df=duf
 alias du=dust
-alias grep="grep --color"
+alias grep="grep --color=auto"
 alias htop=btm
 alias lg="exa -lg --git --icons"
 alias lga="exa -lga --git --icons"
