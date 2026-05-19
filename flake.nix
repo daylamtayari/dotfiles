@@ -30,10 +30,12 @@
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, nix-homebrew, ... }@inputs:
     let
-      # macOS account name — sourced from $USER at evaluation time since it
-      # differs per machine. darwin builds must therefore be run impure:
-      #   darwin-rebuild switch --flake .#work --impure
-      darwinUser = builtins.getEnv "USER";
+      # macOS account name. `darwin-rebuild` runs under sudo, so $USER is
+      # "root" — fall back to $SUDO_USER, which sudo sets to the real account.
+      # darwin builds must be run impure for these getEnv calls to resolve.
+      darwinUser =
+        let sudoUser = builtins.getEnv "SUDO_USER";
+        in if sudoUser != "" then sudoUser else builtins.getEnv "USER";
 
       # Standalone Home Manager configuration for a Linux host.
       # `inputs` is threaded through extraSpecialArgs so modules can reach
