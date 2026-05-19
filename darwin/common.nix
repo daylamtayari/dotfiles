@@ -26,14 +26,29 @@
     autoMigrate = true;
   };
 
-  # GUI applications installed via Homebrew casks.
+  # Homebrew packages. `brews` are CLI formulae, `casks` are GUI apps. Several
+  # are here because their nixpkgs packages are Linux-only (see dev.nix /
+  # security.nix / work.nix); the rest are Mac GUI apps.
   homebrew = {
     enable = true;
+    brews = [
+      "checksec" # dev.nix — nixpkgs package is Linux-only
+      "ike-scan" # security.nix — nixpkgs package is Linux-only
+      "dependency-check" # not in nixpkgs at all
+    ];
     casks = [
       "raycast"
       "slack"
       "zoom"
       "1password"
+      "spotify" # work.nix — nixpkgs package is Linux-only
+      "altair-graphql-client" # dev.nix — nixpkgs altair is x86_64-linux only
+      "veracrypt" # security.nix — nixpkgs package is Linux-only
+      "bloodhound" # security.nix — Linux-only; cask is deprecated upstream
+      # Nerd Font for kitty's font_family + the nvim / ranger devicons
+      # (the nixpkgs font packages are Linux-only — see core.nix).
+      "font-fira-code-nerd-font"
+      "font-symbols-only-nerd-font"
     ];
     onActivation.cleanup = "none"; # do not touch brews not declared here
   };

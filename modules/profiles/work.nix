@@ -12,6 +12,9 @@
   config = lib.mkIf config.my.profiles.work.enable {
     home.packages = with pkgs; [
       super-productivity
+    ]
+    # spotify's nixpkgs package is Linux-only; on macOS it is a Homebrew cask.
+    ++ lib.optionals stdenv.isLinux [
       spotify
     ];
   };

@@ -56,7 +56,6 @@
       pandoc
       gnuplot
       semgrep
-      checksec
       hexedit
       htmlq
       csvkit
@@ -74,17 +73,23 @@
       drawio
       zeal # offline API docs
       bruno # API client
-      altair # GraphQL client
       # Remote access
       remmina
       freerdp # RDP backend for remmina
       # System / networking utilities
       man-db
-      net-tools
       bind # named + dig / host / nsupdate
-      cifs-utils
       inetutils
       ipinfo
+    ]
+    # Linux-only in nixpkgs — excluded on macOS. checksec / altair have
+    # Homebrew equivalents (darwin/common.nix); net-tools / cifs-utils do not
+    # (macOS ships its own BSD networking + native SMB).
+    ++ lib.optionals stdenv.isLinux [
+      net-tools
+      cifs-utils
+      checksec
+      altair # nixpkgs altair (GraphQL client) is x86_64-linux only
     ];
   };
 }

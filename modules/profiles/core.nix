@@ -6,10 +6,10 @@
 #   - system / Qubes / desktop packages — stay pacman-managed (see Phase 6 notes)
 #   - tools owned by a dedicated module: git, delta, gh, kitty, neovim, ranger,
 #     zsh, zoxide
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
-  # Make Home Manager-installed fonts visible to applications.
+  # Make Home Manager-installed fonts visible to applications (Linux).
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
@@ -66,7 +66,12 @@
     yt-dlp
     fastfetch # replaces the unmaintained neofetch
     onefetch
-    # Fonts — kitty's font_family + the nvim / ranger devicons
+  ]
+  # Fonts — Linux only. nixpkgs font packages drag glibc into their build
+  # closure, which has no aarch64-darwin platform; on macOS fonts come from
+  # Homebrew casks (darwin/common.nix). Covers kitty's font_family and the
+  # nvim / ranger devicons.
+  ++ lib.optionals stdenv.isLinux [
     nerd-fonts.fira-code
     nerd-fonts.symbols-only
     noto-fonts

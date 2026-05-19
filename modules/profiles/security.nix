@@ -26,7 +26,6 @@
       assetfinder
       gowitness
       nbtscan
-      ike-scan
       net-snmp # snmpwalk, snmpget, …
 
       # Web application testing
@@ -42,7 +41,6 @@
       netexec # CrackMapExec successor
       evil-winrm
       enum4linux
-      bloodhound
       neo4j # BloodHound's database backend
       exploitdb # searchsploit
 
@@ -68,11 +66,18 @@
       snyk
 
       # Misc
-      veracrypt
       minio-client # `mc` — object-storage / S3 client
       openconnect
-      vpnc
       firefox-esr # dedicated browser for proxying through Burp
+    ]
+    # Linux-only in nixpkgs — excluded on macOS. ike-scan / veracrypt /
+    # bloodhound have Homebrew equivalents (darwin/common.nix); vpnc has none
+    # — openconnect (above) ships vpnc-script and covers it.
+    ++ lib.optionals stdenv.isLinux [
+      ike-scan
+      veracrypt
+      bloodhound
+      vpnc
     ];
   };
 }
