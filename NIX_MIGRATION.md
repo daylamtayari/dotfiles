@@ -47,8 +47,7 @@ Replace chezmoi as the dotfile *and* package manager with a single Nix flake so 
 |---|---|---|---|
 | `dev` | Qubes VM running Arch | standalone HM | **Pilot host.** Qubes GPG glue. |
 | `cyber` | Qubes VM running Arch | standalone HM | Qubes GPG glue; `security` profile. |
-| `pers` | personal macOS | nix-darwin + HM | |
-| `work` | work macOS | nix-darwin + HM | |
+| `work` | work macOS | nix-darwin + HM | `dev` + `security` profiles; GUI apps via Homebrew. |
 
 Flake names are arbitrary labels for `home-manager switch --flake .#<name>`;
 they do **not** need to match the system `hostname`.
@@ -94,24 +93,33 @@ Each Qubes host (`dev`, `cyber`) then owns an independent, persistent store.
 │   ├── nvim.nix                     # xdg.configFile."nvim".source = ./config/nvim
 │   ├── kitty.nix                    # programs.kitty
 │   ├── ranger.nix                   # programs.ranger + devicons plugin
-│   ├── tools.nix                    # base CLI package list
+│   ├── gh.nix                       # programs.gh
+│   ├── misc.nix                     # standalone configs: aws, pycodestyle, VSCodium
 │   ├── qubes.nix                    # my.host.qubes — split-GPG + inter-VM aliases
-│   └── profiles/
-│       ├── dev.nix                  # opt-in dev toolchain (my.profiles.dev)
-│       └── security.nix             # opt-in cyber toolkit (my.profiles.security)
+│   ├── aerospace.nix                # AeroSpace WM (macOS only)
+│   └── profiles/                    # package-set modules
+│       ├── core.nix                 # base CLI packages (unconditional)
+│       ├── core-gui.nix             # base GUI apps, Linux-only (unconditional)
+│       ├── dev.nix                  # dev toolchain (my.profiles.dev)
+│       ├── security.nix             # cyber toolkit (my.profiles.security)
+│       ├── pers.nix                 # personal apps (my.profiles.pers)
+│       └── i3.nix                   # i3 + rofi + polybar (my.profiles.i3) — scaffold
 ├── hosts/
 │   ├── dev.nix                      # Qubes VM (Arch)
 │   ├── cyber.nix                    # Qubes VM (Arch)
-│   ├── pers.nix                     # personal macOS (HM side)
 │   └── work.nix                     # work macOS (HM side)
 ├── darwin/
-│   ├── pers.nix                     # nix-darwin system config (brew casks, defaults)
-│   └── work.nix
+│   └── common.nix                   # shared nix-darwin system config (casks, keymap)
 └── config/                          # raw dotfile trees, symlinked via xdg.configFile
     ├── nvim/                         # moved verbatim from dot_config/nvim
     ├── kitty/
     ├── ranger/
-    └── zsh/                          # aliases dir, functions.zsh, p10k.zsh
+    ├── zsh/                          # aliases dir, functions.zsh, p10k.zsh
+    ├── wget/                         # wgetrc
+    ├── VSCodium/                     # product.json
+    ├── aws/                          # config → ~/.aws/config
+    ├── aerospace/                    # aerospace.toml + bring-workspace.sh
+    └── pycodestyle
 ```
 
 ## Conventions
@@ -134,7 +142,7 @@ Each Qubes host (`dev`, `cyber`) then owns an independent, persistent store.
 
 | chezmoi today | Home Manager equivalent |
 |---|---|
-| `.chezmoidata/packages.yaml` → `pacman`/`paru` | `home.packages = with pkgs; [ ... ]` in `modules/tools.nix` |
+| `.chezmoidata/packages.yaml` → `pacman`/`paru` | `home.packages` in `modules/profiles/{core,core-gui,dev,security,pers}.nix` |
 | `run_once_oh-my-zsh.sh` (clones OMZ + p10k + plugins) | `programs.zsh.oh-my-zsh.enable` + packaged `zsh-powerlevel10k`, `zsh-syntax-highlighting`, `zsh-autosuggestions` |
 | `dot_zshenv.tmpl` env exports | `home.sessionVariables` |
 | `dot_gitconfig.tmpl` | `programs.git` (`userEmail`, `signing`, `delta`, `extraConfig`) |
@@ -143,6 +151,8 @@ Each Qubes host (`dev`, `cyber`) then owns an independent, persistent store.
 | `pyenv` / `eval "$(pyenv init)"` | keep in `programs.zsh.initExtra`, or move to Nix-managed Python later |
 | Arch `pacman` install scripts | stays system-side; HM does not manage system packages on non-NixOS |
 | NvChad lua tree | `xdg.configFile."nvim".source = ./config/nvim` — no translation |
+| `dot_config/gh/config.yml` | `programs.gh` (`settings`) |
+| `dot_aws/config`, `dot_config/{wget,pycodestyle,VSCodium}` | `home.file` / `xdg.configFile` symlinks — no HM module |
 
 Notable package-name mappings to verify in nixpkgs: `git-delta` → `delta`,
 `dust` → `du-dust`, `okkular` (typo) → `kdePackages.okular`, `neofetch` →
@@ -206,33 +216,44 @@ reads the commit email from `$GIT_EMAIL` so it is never committed to the repo.
 3. Set up Nix-store persistence + install Nix (see *Nix on Qubes*).
 4. Test in a fresh/cloned VM.
 
-### Phase 5 — Add macOS (`pers`, `work`)
+### Phase 5 — Add macOS (`work`)
 
 1. Add the `nix-darwin` input to `flake.nix`.
-2. Install Nix on `pers` (Determinate installer), then nix-darwin.
-3. `darwin/pers.nix` — `homebrew.casks` for GUI apps absent from nixpkgs, plus
-   any declarative `system.defaults.*`.
-4. `darwinConfigurations.pers` wires `darwin/pers.nix` +
-   `home-manager.darwinModules.home-manager` + `home.nix` + `hosts/pers.nix`.
-5. Verify shell/git/nvim/tools on `pers`; repeat for `work`.
+2. Install Nix on the `work` Mac (Determinate installer), then nix-darwin.
+3. `darwin/common.nix` — shared nix-darwin system config: `homebrew.casks`,
+   `system.keyboard` remaps, etc.
+4. `darwinConfigurations.work` wires `darwin/common.nix` +
+   `home-manager.darwinModules.home-manager` + `home.nix` + `hosts/work.nix`.
+5. Verify shell/git/nvim/tools on `work`
+   (`darwin-rebuild switch --flake .#work --impure`).
 
 ### Phase 6 — Decommission chezmoi
 
-1. `git rm -r dot_aws dot_config dot_zshenv.tmpl dot_gitconfig.tmpl .chezmoi* run_once_* run_onchange_*`.
-2. Remove the ranger devicons submodule (`.gitmodules`, `.git/modules/`).
+1. Remove the leftover chezmoi sources. By this phase `dot_config/` holds only
+   `chezmoi/` and the dead `zsh/` files — the real configs were migrated to
+   `config/` + modules in Phase 2, and `dot_aws/` is already gone:
+   `git rm -r dot_config dot_zshenv.tmpl dot_gitconfig.tmpl .chezmoi* run_once_* run_onchange_*`.
+2. `.gitmodules` is removed with step 1. Stale **local** `.git/` submodule
+   state also remains from this repo's pre-chezmoi *dotbot* era: `.git/config`
+   `submodule.*` sections and `.git/modules/{dotbot,oh-my-zsh,ranger}`. No tree
+   has gitlinks referencing them, so this is local-only cruft — clear with
+   `git config --remove-section` + `rm -rf .git/modules/*` when convenient.
 3. Uninstall chezmoi per host (`pacman -R chezmoi` / `brew uninstall chezmoi`).
 
 ### Phase 7 — Fill in profiles
 
-Populate `modules/profiles/dev.nix` and `modules/profiles/security.nix` with the
-real toolchains. Touches only those two files.
+Package sets live in `modules/profiles/`: `core.nix` / `core-gui.nix`
+(unconditional) and `dev.nix` / `security.nix` / `pers.nix` (gated by
+`my.profiles.<name>.enable`). All five are populated — `core`, `core-gui`,
+`dev`, `pers` from the `dev` VM and `security` from the `cyber` VM (its
+package list diffed against `dev` to isolate the security-only tools).
 
 ---
 
 ## Branching & rollback
 
 - All migration work on the `nix` branch; merge to `main` only after Phase 5
-  (all four hosts confirmed working).
+  (all hosts — `dev`, `cyber`, `work` — confirmed working).
 - `pre-nix-snapshot` branch is the chezmoi-era rollback point — keep indefinitely.
 - **Per-phase rollback:** `home-manager generations` + `home-manager switch
   --rollback`.
@@ -244,12 +265,14 @@ real toolchains. Touches only those two files.
 
 ## Open items
 
-- Confirm `home.username` / `home.homeDirectory` for the macOS hosts (`pers`,
-  `work`). Qubes hosts are `user` / `/home/user`.
-- Phase 7: decide concrete `dev` and `security` profile package lists.
+- Complete the `i3` profile (i3 / rofi / polybar configuration) and AeroSpace
+  `settings` — both are scaffolded but not yet configured.
+- Fill in the remaining macOS modifier-key remaps in `darwin/common.nix`
+  (`command → fn` is wired as the first one).
 
 Resolved: `dev` **does** use the Qubes GPG wrapper — `modules/qubes.nix` now
-applies the split-GPG glue whenever `my.host.qubes = true`.
+applies the split-GPG glue whenever `my.host.qubes = true`. The macOS account
+name is sourced from `$USER` at switch time (impure), so it needs no entry.
 
 ## Status
 
@@ -261,17 +284,32 @@ applies the split-GPG glue whenever `my.host.qubes = true`.
       `home-manager switch --flake .#dev` succeeds. (Persistence of the Nix
       install itself is a Phase 0 item — see above.)
 - [x] **Phase 2** — core modules written: `tools`, `git`, `shell`, `kitty`,
-      `ranger`, `nvim`, plus `modules/qubes.nix` (the `my.host.qubes` flag,
-      brought forward from Phase 4). Config trees moved to `config/`; imports
-      uncommented in `home.nix`. Per-module `home-manager switch --flake .#dev`
-      verification is still pending — blocked on Phase 0 (no persistent Nix
-      install yet).
-- [ ] **Phase 3** — profile flag scaffolding. `modules/profiles/dev.nix` is
-      done (`my.profiles.dev` — terraform + pnpm) and enabled on `dev`;
-      `modules/profiles/security.nix` still to do.
-- [ ] **Phase 4** — `cyber` host. Qubes split-GPG glue + aliases are already
-      done (`modules/qubes.nix`); remaining: `hosts/cyber.nix`, profile flags,
-      throwaway-VM test.
-- [ ] **Phase 5** — macOS hosts.
-- [ ] **Phase 6** — decommission chezmoi.
-- [ ] **Phase 7** — fill in profiles.
+      `ranger`, `nvim`, plus `gh` (`programs.gh`), `misc` (aws / pycodestyle /
+      VSCodium) and `modules/qubes.nix` (the `my.host.qubes` flag, brought
+      forward from Phase 4). All of `dot_config/` and `dot_aws/` is migrated
+      except the chezmoi-only leftovers. Config trees moved to `config/`;
+      imports uncommented in `home.nix`. Per-module
+      `home-manager switch --flake .#dev` verification is still pending —
+      blocked on Phase 0 (no persistent Nix install yet).
+- [x] **Phase 3** — profile flag scaffolding done: `modules/profiles/dev.nix`
+      (`my.profiles.dev` — terraform + pnpm) and `modules/profiles/security.nix`
+      (`my.profiles.security` — empty, populated in Phase 7) are both imported
+      from `home.nix`; `dev` enables the `dev` profile.
+- [x] **Phase 4** — `cyber` host added: `hosts/cyber.nix` (Qubes; enables
+      `my.host.qubes` and the `dev` + `security` profiles) plus its `flake.nix`
+      output. Remaining is host-side and manual: persist `/nix` and install Nix
+      on the `cyber` VM (see *Nix on Qubes*), then verify in a throwaway clone.
+- [x] **Phase 5** — macOS `work` host wired (repo side): `nix-darwin` +
+      `nix-homebrew` inputs, `darwinConfigurations.work`, `darwin/common.nix`
+      (Homebrew casks raycast/slack/zoom/1password, Cmd/Option/Fn keymap),
+      `hosts/work.nix` (dev + security profiles), `modules/aerospace.nix`
+      (config + bring-workspace.sh from `config/aerospace/`). Remaining is
+      host-side/manual — install Nix + nix-darwin on the Mac, then
+      `darwin-rebuild switch --flake .#work --impure`.
+- [x] **Phase 6** — chezmoi decommissioned early: all 13 chezmoi source files
+      removed, the repo is now a pure Nix flake. Still pending: uninstall the
+      `chezmoi` binary per host, and clear the local `.git/` dotbot-era
+      submodule cruft (step 2 above).
+- [x] **Phase 7** — profiles populated: `core`, `core-gui`, `dev`, `pers` from
+      the `dev` VM and `security` from the `cyber` VM. The `i3` profile is
+      scaffolded for later. (Work GUI apps are Homebrew casks, not a profile.)

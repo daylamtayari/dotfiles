@@ -15,6 +15,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Installs/manages the Homebrew installation itself on macOS hosts, so
+    # Homebrew is present even on a fresh Mac.
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
     # ranger_devicons plugin. `flake = false` makes the input a plain source
     # tree; flake.lock pins the exact commit and `nix flake update` rolls it
     # forward. Replaces the chezmoi `.chezmoiexternal.toml` git-repo external.
@@ -24,7 +28,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nix-darwin, nix-homebrew, ... }@inputs:
     let
       # macOS account name — sourced from $USER at evaluation time since it
       # differs per machine. darwin builds must therefore be run impure:
@@ -47,12 +51,13 @@
           ];
         };
 
-      # nix-darwin system (with Home Manager) for a macOS host.
+      # nix-darwin system (with Home Manager + Homebrew) for a macOS host.
       mkDarwin = hostModule:
         nix-darwin.lib.darwinSystem {
           specialArgs = { inherit inputs; user = darwinUser; };
           modules = [
             ./darwin/common.nix
+            nix-homebrew.darwinModules.nix-homebrew
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

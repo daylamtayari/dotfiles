@@ -1,0 +1,140 @@
+# AeroSpace config — Option (alt) as modifier.
+#
+# Physical keyboard layout:  fn | ctrl | option | cmd | space
+# Remapped so each physical key sends:
+#                            cmd | ctrl | fn  | option | space
+#
+# Result:
+#   - Bottom-left finger -> Cmd (native macOS shortcuts: Cmd+C, Cmd+V, Cmd+Q...)
+#   - Ctrl stays put (terminal bindings work: Ctrl+C SIGINT, Ctrl+L clear, etc.)
+#   - Thumb (originally Cmd) -> Option = AeroSpace mod
+#   - Old Option position -> Fn (emoji picker, F-key alts)
+#
+# AeroSpace's modifier name for Option is `alt`.
+
+start-at-login = true
+after-login-command = []
+after-startup-command = []
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+[gaps]
+inner.horizontal = 8
+inner.vertical   = 8
+outer.left       = 4
+outer.bottom     = 4
+outer.top        = 4
+outer.right      = 4
+
+###############################################################################
+# Main mode
+###############################################################################
+[mode.main.binding]
+
+# --- Launch apps ---------------------------------------------------------
+alt-enter = 'exec-and-forget open -na kitty'
+alt-d     = 'exec-and-forget open -a Raycast'
+
+# --- Window management ---------------------------------------------------
+alt-shift-q = 'close'
+
+alt-f = 'fullscreen'
+
+# --- Focus (vim hjkl) ----------------------------------------------------
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# --- Move focused window -------------------------------------------------
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# --- Move whole workspace to another monitor -----------------------------
+alt-shift-left  = 'move-workspace-to-monitor --wrap-around prev'
+alt-shift-right = 'move-workspace-to-monitor --wrap-around next'
+
+# --- Switch to workspace -------------------------------------------------
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 10'
+alt-minus = 'workspace 11'
+alt-equal = 'workspace 12'
+alt-leftSquareBracket  = 'workspace 13'
+alt-rightSquareBracket = 'workspace 14'
+alt-backslash          = 'workspace 15'
+
+# --- Move focused window to workspace ------------------------------------
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-0 = 'move-node-to-workspace 10'
+alt-shift-minus = 'move-node-to-workspace 11'
+alt-shift-equal = 'move-node-to-workspace 12'
+alt-shift-leftSquareBracket  = 'move-node-to-workspace 13'
+alt-shift-rightSquareBracket = 'move-node-to-workspace 14'
+alt-shift-backslash          = 'move-node-to-workspace 15'
+
+# --- Bring workspace N to current monitor (your mod+Tab+N script) --------
+# Using ctrl as the secondary mod here since alt is the primary
+alt-ctrl-1 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 1'
+alt-ctrl-2 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 2'
+alt-ctrl-3 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 3'
+alt-ctrl-4 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 4'
+alt-ctrl-5 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 5'
+alt-ctrl-6 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 6'
+alt-ctrl-7 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 7'
+alt-ctrl-8 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 8'
+alt-ctrl-9 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 9'
+alt-ctrl-0 = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 10'
+alt-ctrl-minus = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 11'
+alt-ctrl-equal = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 12'
+alt-ctrl-leftSquareBracket  = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 13'
+alt-ctrl-rightSquareBracket = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 14'
+alt-ctrl-backslash          = 'exec-and-forget ~/.config/aerospace/bring-workspace.sh 15'
+
+# --- Reload config / resize mode -----------------------------------------
+alt-shift-c = 'reload-config'
+alt-r = 'mode resize'
+
+alt-w = 'layout accordion horizontal vertical'
+alt-e = 'layout tiles horizontal vertical'
+
+###############################################################################
+# Resize mode
+###############################################################################
+[mode.resize.binding]
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+
+left  = 'resize width -50'
+down  = 'resize height +50'
+up    = 'resize height -50'
+right = 'resize width +50'
+
+enter = 'mode main'
+esc   = 'mode main'
+alt-r = 'mode main'

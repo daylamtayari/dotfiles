@@ -17,30 +17,40 @@
   system.primaryUser = user;
   users.users.${user}.home = "/Users/${user}";
 
-  # GUI applications installed via Homebrew. Homebrew itself must already be
-  # installed on the host (Phase 5 setup).
+  # Homebrew itself is installed and managed by nix-homebrew, so it is present
+  # even on a fresh Mac; `autoMigrate` adopts an already-installed Homebrew
+  # rather than failing.
+  nix-homebrew = {
+    enable = true;
+    user = user;
+    autoMigrate = true;
+  };
+
+  # GUI applications installed via Homebrew casks.
   homebrew = {
     enable = true;
     casks = [
       "raycast"
+      "slack"
+      "zoom"
+      "1password"
     ];
     onActivation.cleanup = "none"; # do not touch brews not declared here
   };
 
-  # Modifier-key remapping. `command → fn` is wired below as a worked example;
-  # add the rest of the remaps as { Src; Dst; } pairs. The integers are IOKit
-  # HID usage codes (Nix hex literals):
-  #   left command 0x7000000E3   left control 0x7000000E0
-  #   left option  0x7000000E2   caps lock    0x700000039
-  #   fn / globe   0xFF00000003
+  # Modifier-key remap for the bottom-left key cluster. Physical
+  # fn|ctrl|option|command is remapped to send command|ctrl|fn|option, so
+  # AeroSpace's `alt` (Option) mod sits under the thumb. See the header of
+  # config/aerospace/aerospace.toml for the rationale. Integers are IOKit HID
+  # usage codes (Nix hex literals):
+  #   fn / globe 0xFF00000003   control 0x7000000E0
+  #   option     0x7000000E2    command 0x7000000E3
   system.keyboard = {
     enableKeyMapping = true;
     userKeyMapping = [
-      # left Command → Fn (Globe)
-      {
-        HIDKeyboardModifierMappingSrc = 0x7000000E3;
-        HIDKeyboardModifierMappingDst = 0xFF00000003;
-      }
+      { HIDKeyboardModifierMappingSrc = 0xFF00000003; HIDKeyboardModifierMappingDst = 0x7000000E3; } # fn → command
+      { HIDKeyboardModifierMappingSrc = 0x7000000E2; HIDKeyboardModifierMappingDst = 0xFF00000003; } # option → fn
+      { HIDKeyboardModifierMappingSrc = 0x7000000E3; HIDKeyboardModifierMappingDst = 0x7000000E2; } # command → option
     ];
   };
 
