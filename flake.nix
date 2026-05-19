@@ -9,6 +9,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-darwin = {
+      # The master branch tracks nixpkgs-unstable.
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # ranger_devicons plugin. `flake = false` makes the input a plain source
     # tree; flake.lock pins the exact commit and `nix flake update` rolls it
     # forward. Replaces the chezmoi `.chezmoiexternal.toml` git-repo external.
@@ -16,31 +22,44 @@
       url = "github:alexanderjeurissen/ranger_devicons";
       flake = false;
     };
-
-    # Added in Phase 5 for the macOS hosts (pers, work):
-    # nix-darwin = {
-    #   # The master branch tracks nixpkgs-unstable.
-    #   url = "github:nix-darwin/nix-darwin";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
     let
-      # Build a standalone Home Manager configuration for a Linux host.
+      # macOS account name — sourced from $USER at evaluation time since it
+      # differs per machine. darwin builds must therefore be run impure:
+      #   darwin-rebuild switch --flake .#work --impure
+      darwinUser = builtins.getEnv "USER";
+
+      # Standalone Home Manager configuration for a Linux host.
       # `inputs` is threaded through extraSpecialArgs so modules can reach
       # non-flake inputs (e.g. ranger-devicons) as a module argument.
       mkHome = { system, hostModule }:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
-            # Allow unfree packages system-wide (e.g. terraform, BUSL-licensed).
             config.allowUnfree = true;
           };
           extraSpecialArgs = { inherit inputs; };
           modules = [
             ./home.nix
             hostModule
+          ];
+        };
+
+      # nix-darwin system (with Home Manager) for a macOS host.
+      mkDarwin = hostModule:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit inputs; user = darwinUser; };
+          modules = [
+            ./darwin/common.nix
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.${darwinUser} = import hostModule;
+            }
           ];
         };
     in
@@ -51,17 +70,14 @@
           hostModule = ./hosts/dev.nix;
         };
 
-        # Phase 4 — Qubes Arch template.
-        # cyber = mkHome {
-        #   system = "x86_64-linux";
-        #   hostModule = ./hosts/cyber.nix;
-        # };
+        cyber = mkHome {
+          system = "x86_64-linux";
+          hostModule = ./hosts/cyber.nix;
+        };
       };
 
-      # Phase 5 — macOS hosts via nix-darwin.
-      # darwinConfigurations = {
-      #   pers = nix-darwin.lib.darwinSystem { ... };
-      #   work = nix-darwin.lib.darwinSystem { ... };
-      # };
+      darwinConfigurations = {
+        work = mkDarwin ./hosts/work.nix;
+      };
     };
 }

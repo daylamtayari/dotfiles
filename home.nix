@@ -1,18 +1,9 @@
 # home.nix — shared base configuration imported by every host.
-#
-# Phase 1 keeps this intentionally minimal:
-#   - Phase 2 uncomments the module imports below.
-#   - Phase 3 adds the profile modules (modules/profiles/*).
-# See NIX_MIGRATION.md for the full plan.
-#
-# Per-host values (home.username, home.homeDirectory, profile flags) live in
-# hosts/<name>.nix, NOT here.
 { ... }:
 
 {
   imports = [
-    # Phase 2 — core modules:
-    ./modules/tools.nix
+    # Core modules:
     ./modules/git.nix
     ./modules/shell.nix
     ./modules/kitty.nix
@@ -21,13 +12,20 @@
     ./modules/gh.nix
     ./modules/misc.nix
 
-    # Qubes glue — always imported so `my.host.qubes` exists everywhere;
-    # enabled per host (see hosts/*.nix).
+    # Qubes configuration for Qubes VMs
     ./modules/qubes.nix
 
-    # Profile flag modules (always imported; enabled per host):
+    # macOS configuration (guarded to Darwin)
+    ./modules/aerospace.nix
+
+    # Package-set modules
+    ./modules/profiles/core.nix
+    ./modules/profiles/core-gui.nix
     ./modules/profiles/dev.nix
-    # Phase 3 — ./modules/profiles/security.nix
+    ./modules/profiles/security.nix
+    ./modules/profiles/pers.nix
+    ./modules/profiles/work.nix
+    ./modules/profiles/i3.nix
   ];
 
   home.stateVersion = "25.11";
