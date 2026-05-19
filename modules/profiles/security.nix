@@ -66,7 +66,6 @@
       # Secrets / dependency scanning
       trufflehog
       snyk
-      dependency-check
 
       # Misc
       veracrypt
