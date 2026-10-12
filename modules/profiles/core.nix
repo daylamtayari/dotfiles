@@ -12,7 +12,7 @@
   # fontconfig — Linux only. The font packages below are Linux-only too, so on
   # macOS there is nothing for it to do; disabling it keeps anything
   # font-related out of the darwin evaluation.
-  fonts.fontconfig.enable = pkgs.stdenv.isLinux;
+  fonts.fontconfig.enable = pkgs.stdenv.hostPlatform.isLinux;
 
   home.packages = with pkgs; [
     # Archives
@@ -57,6 +57,8 @@
     gping
     proxychains-ng
     # Misc CLI
+    coreutils # GNU rm/ls/cp/… — same binary & syntax on macOS and Linux
+    gnupg
     tmux
     vim # plain-vim fallback; the real editor is modules/nvim.nix
     vifm
@@ -69,11 +71,19 @@
     fastfetch # replaces the unmaintained neofetch
     onefetch
   ]
+  # Mullvad — Linux only. nixpkgs inherits mullvad-vpn's meta.platforms from
+  # electron, which claims aarch64-darwin, but the derivation hardcodes
+  # `npmBuildScript = "pack:linux"`, so the macOS build packages a Linux
+  # Electron tree and dies renaming dist/linux-arm64-unpacked/electron.
+  # On macOS it comes from the Homebrew cask (darwin/common.nix).
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mullvad-vpn
+  ]
   # Fonts — Linux only. nixpkgs font packages drag glibc into their build
   # closure, which has no aarch64-darwin platform; on macOS fonts come from
   # Homebrew casks (darwin/common.nix). Covers kitty's font_family and the
   # nvim / ranger devicons.
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     nerd-fonts.fira-code
     nerd-fonts.symbols-only
     noto-fonts

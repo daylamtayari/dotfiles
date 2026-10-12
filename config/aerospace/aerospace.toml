@@ -121,6 +121,9 @@ alt-r = 'mode resize'
 alt-w = 'layout accordion horizontal vertical'
 alt-e = 'layout tiles horizontal vertical'
 
+# Toggle focused window between floating (popped up) and tiled
+alt-shift-space = 'layout floating tiling'
+
 ###############################################################################
 # Resize mode
 ###############################################################################

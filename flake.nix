@@ -26,6 +26,18 @@
       url = "github:alexanderjeurissen/ranger_devicons";
       flake = false;
     };
+
+    # nvim-mcp — the MCP server that exposes a running Neovim to Claude Code
+    # and opencode. Its flake ships the Rust server as a package, which is why
+    # we take the binary from here rather than from lazy.nvim's
+    # `build = "cargo install --path ."`: that build cannot link under this
+    # host's Nix toolchain (aws-lc-sys fails with `ld: library not found for
+    # -liconv`). The lazy.nvim spec still provides the plugin's Lua half.
+    #
+    # nixpkgs is deliberately NOT `follows`-ed here: the flake pins its own
+    # nixpkgs plus a fenix Rust toolchain, and repointing it would force a
+    # from-source rebuild of the toolchain instead of reusing the binary cache.
+    nvim-mcp.url = "github:linw1995/nvim-mcp";
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, nix-homebrew, ... }@inputs:
@@ -44,6 +56,7 @@
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
+            overlays = import ./overlays;
             config.allowUnfree = true;
           };
           extraSpecialArgs = { inherit inputs; };
@@ -64,6 +77,12 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              # Move any pre-existing unmanaged file that a managed symlink would
+              # clobber to <file>.backup instead of aborting the switch (e.g. the
+              # opencode.jsonc that opencode created before we managed it). Only
+              # fires on first-time collisions; once HM owns the symlink there is
+              # nothing to back up.
+              home-manager.backupFileExtension = "backup";
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.${darwinUser} = import hostModule;
             }

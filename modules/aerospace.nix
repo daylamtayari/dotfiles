@@ -1,22 +1,22 @@
 # modules/aerospace.nix — AeroSpace tiling window manager (macOS only).
 #
-# `programs.aerospace` asserts on non-Darwin platforms, so everything is
-# guarded — on the Linux hosts this module contributes nothing. The config and
-# the bring-workspace helper are kept verbatim under config/aerospace/.
+# AeroSpace itself is installed as a Homebrew cask (darwin/common.nix); this
+# module only manages its config on Darwin. The config and the bring-workspace
+# helper are kept verbatim under config/aerospace/. `start-at-login = true` in
+# aerospace.toml makes AeroSpace register itself as a login item, so no launchd
+# agent is needed. On the Linux hosts this module contributes nothing.
 { pkgs, lib, ... }:
 
 {
-  programs.aerospace = lib.mkIf pkgs.stdenv.isDarwin {
-    enable = true;
-    # The TOML sets `start-at-login = true`; the module requires that to be
-    # backed by a launchd agent, so launchd.enable must be true to match.
-    launchd.enable = true;
-    settings = builtins.fromTOML (builtins.readFile ../config/aerospace/aerospace.toml);
+  # AeroSpace reads $XDG_CONFIG_HOME/aerospace/aerospace.toml (i.e.
+  # ~/.config/aerospace/aerospace.toml) — same path home-manager used to write.
+  xdg.configFile."aerospace/aerospace.toml" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+    source = ../config/aerospace/aerospace.toml;
   };
 
   # Helper referenced by the alt-ctrl-N "bring workspace to this monitor"
   # bindings in aerospace.toml.
-  xdg.configFile."aerospace/bring-workspace.sh" = lib.mkIf pkgs.stdenv.isDarwin {
+  xdg.configFile."aerospace/bring-workspace.sh" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     source = ../config/aerospace/bring-workspace.sh;
     executable = true;
   };

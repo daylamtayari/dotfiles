@@ -1,0 +1,30 @@
+{
+  "github": {
+    "type": "http",
+    "url": "https://api.githubcopilot.com/mcp/",
+    "headersHelper": "printf '{\"Authorization\":\"Bearer %s\"}' \"$(gh auth token)\""
+  },
+  "wiz": {
+    "type": "http",
+    "url": "https://mcp.app.wiz.io"
+  },
+  "panther": {
+    "type": "stdio",
+    "command": "sh",
+    "args": ["-c", "PANTHER_INSTANCE_URL=\"$(op read 'op://Employee/Panther API Key/website')\" PANTHER_API_TOKEN=\"$(op read 'op://Employee/Panther API Key/password')\" exec docker run -i -e PANTHER_INSTANCE_URL -e PANTHER_API_TOKEN --rm ghcr.io/panther-labs/mcp-panther"]
+  },
+  "crowdstrike": {
+    "type": "stdio",
+    "command": "sh",
+    "args": ["-c", "FALCON_CLIENT_ID=\"$(op read 'op://Employee/Falcon MCP/username')\" FALCON_CLIENT_SECRET=\"$(op read 'op://Employee/Falcon MCP/password')\" FALCON_BASE_URL=\"$(op read 'op://Employee/Falcon MCP/website')\" exec \"$HOME/.pyenv/versions/crowdstrike-mcp/bin/falcon-mcp\""]
+  },
+  "burp": {
+    "type": "sse",
+    "url": "http://127.0.0.1:9876"
+  },
+  "nvim": {
+    "type": "stdio",
+    "command": "nvim-mcp",
+    "args": ["--connect", "auto"]
+  }
+}

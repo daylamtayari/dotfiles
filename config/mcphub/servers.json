@@ -1,0 +1,32 @@
+{
+  "mcpServers": {
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${cmd: gh auth token}"
+      }
+    },
+    "wiz": {
+      "url": "https://mcp.app.wiz.io"
+    },
+    "panther": {
+      "command": "docker",
+      "args": ["run", "-i", "-e", "PANTHER_INSTANCE_URL", "-e", "PANTHER_API_TOKEN", "--rm", "ghcr.io/panther-labs/mcp-panther"],
+      "env": {
+        "PANTHER_INSTANCE_URL": "${cmd: op read 'op://Employee/Panther API Key/website'}",
+        "PANTHER_API_TOKEN": "${cmd: op read 'op://Employee/Panther API Key/password'}"
+      }
+    },
+    "crowdstrike": {
+      "command": "/Users/dtayari/.pyenv/versions/crowdstrike-mcp/bin/falcon-mcp",
+      "env": {
+        "FALCON_CLIENT_ID": "${cmd: op read 'op://Employee/Falcon MCP/username'}",
+        "FALCON_CLIENT_SECRET": "${cmd: op read 'op://Employee/Falcon MCP/password'}",
+        "FALCON_BASE_URL": "${cmd: op read 'op://Employee/Falcon MCP/website'}"
+      }
+    },
+    "burp": {
+      "url": "http://127.0.0.1:9876"
+    }
+  }
+}

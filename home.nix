@@ -11,6 +11,9 @@
     ./modules/nvim.nix
     ./modules/gh.nix
     ./modules/misc.nix
+    ./modules/claude.nix
+    ./modules/opencode.nix
+    ./modules/mcphub.nix
 
     # Qubes configuration for Qubes VMs
     ./modules/qubes.nix

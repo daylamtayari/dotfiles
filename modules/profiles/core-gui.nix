@@ -7,10 +7,13 @@
 
 {
   home.packages = with pkgs; [
-    firefox
     obsidian # unfree
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # firefox is Linux-only here; on macOS it comes from the Homebrew cask in
+    # darwin/common.nix. The nixpkgs Firefox build is unsigned, so apps that
+    # verify a browser's code signature won't recognise it on macOS.
+    firefox
     ungoogled-chromium
     vlc
     nomacs # image viewer

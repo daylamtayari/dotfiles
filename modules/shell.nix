@@ -4,7 +4,7 @@
 # environment exports from dot_zshenv.tmpl. The alias/function/p10k trees are
 # kept verbatim under config/zsh/ and symlinked into ZDOTDIR; the rest of the
 # old .zshrc is expressed natively or moved into initContent.
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   # Exports XDG_CONFIG_HOME / XDG_DATA_HOME / XDG_STATE_HOME / XDG_CACHE_HOME.
@@ -44,6 +44,19 @@
     # oh-my-zsh: keep the terminal title static. Set as a session variable so
     # it is exported before .zshrc (and therefore oh-my-zsh.sh) runs.
     DISABLE_AUTO_TITLE = "true";
+  } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+    # macOS can't run a container daemon natively, so Podman runs one inside a
+    # rootless Linux VM (`podman machine`). Point the Docker-compatible clients
+    # (docker CLI / compose / buildx — see modules/profiles/dev.nix) at Podman's
+    # API socket. The socket only exists while the VM is up: `podman machine
+    # start`. Linux hosts talk to the system daemon's default socket, so this is
+    # Darwin-only. The path is derived from the (default) machine name and is
+    # recreated on each `machine start`.
+    #
+    # Podman puts the socket under $TMPDIR, which on macOS is the per-user
+    # /var/folders/.../T/ dir — NOT /tmp. TMPDIR carries a trailing slash, so
+    # ${TMPDIR%/} strips it before we append our own separator.
+    DOCKER_HOST = "unix://\${TMPDIR%/}/podman/podman-machine-default-api.sock";
   };
 
   home.sessionPath = [
