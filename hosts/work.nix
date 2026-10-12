@@ -1,8 +1,10 @@
-# hosts/work.nix — work macOS host (nix-darwin + Home Manager).
+# hosts/work.nix — work hosts: macOS (nix-darwin + Home Manager) and NixOS.
 #
-# home.username / home.homeDirectory are set by the nix-darwin Home Manager
-# integration (from the account in flake.nix), so this overlay only selects
-# toolchain profiles. macOS system config is shared in darwin/common.nix.
+# Shared by darwinConfigurations.work and nixosConfigurations.work.
+# home.username / home.homeDirectory are set by the nix-darwin / NixOS Home
+# Manager integration (from the account in flake.nix), so this overlay only
+# selects toolchain profiles. System config lives in darwin/common.nix and
+# nixos/common.nix respectively.
 { ... }:
 
 {

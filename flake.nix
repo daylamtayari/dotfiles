@@ -88,6 +88,27 @@
             }
           ];
         };
+
+      # NixOS system (with Home Manager) for a Linux host. `nixosModule` is the
+      # machine's system config (nixos/<host>/), `hostModule` its HM overlay.
+      # The account name is passed explicitly — NixOS declares the user itself
+      # in nixos/common.nix, so it is not read from the environment.
+      mkNixos = { system, user, nixosModule, hostModule }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs user; };
+          modules = [
+            nixosModule
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.${user} = import hostModule;
+            }
+          ];
+        };
     in
     {
       homeConfigurations = {
@@ -104,6 +125,18 @@
 
       darwinConfigurations = {
         work = mkDarwin ./hosts/work.nix;
+      };
+
+      # Shares hosts/work.nix with the Mac, so both work machines run the same
+      # profiles. Same `work` label: nixos-rebuild only looks in
+      # nixosConfigurations, darwin-rebuild only in darwinConfigurations.
+      nixosConfigurations = {
+        work = mkNixos {
+          system = "x86_64-linux";
+          user = "dtayari";
+          nixosModule = ./nixos/work;
+          hostModule = ./hosts/work.nix;
+        };
       };
     };
 }
