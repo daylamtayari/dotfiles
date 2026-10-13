@@ -9,7 +9,7 @@
 #
 # X11-only pieces were replaced: feh → `output * bg`, xss-lock + betterlockscreen
 # → swayidle + swaylock, polybar → Waybar, arandr → wdisplays + kanshi, the yad
-# popups → Waybar's calendar tooltip and a rofi power menu. Qubes-only pieces
+# power popup → a rofi power menu (the yad calendar stays). Qubes-only pieces
 # (per-qube window colors, qubes-i3-xdg-autostart, qubes-menu, the qube
 # window rules) were dropped. picom's rounded corners come from SwayFX instead
 # (`corner_radius` below; the swayfx package is set in nixos/work/default.nix).
@@ -59,6 +59,35 @@ let
         Reboot) systemctl reboot ;;
         Logout) swaymsg exit ;;
       esac
+    '';
+  };
+
+  # Click-to-toggle calendar under the Waybar clock — the i3-era yad popup.
+  # Waybar's own calendar is a tooltip, so it vanishes when the pointer leaves
+  # and can't be clicked. The for_window rule below floats it; Wayland gives
+  # clients no say in placement, so it's moved here once mapped: centered
+  # horizontally, just below the bar (workspace coordinates already exclude
+  # Waybar's exclusive zone). Closes on Esc, on losing focus, or on a second
+  # click (clicking the bar doesn't take keyboard focus from it).
+  calendarPopup = pkgs.writeShellApplication {
+    name = "sway-calendar-popup";
+    runtimeInputs = [ pkgs.yad pkgs.jq pkgs.procps ];
+    text = ''
+      if pkill -u "$USER" -f '^yad --calendar --title=yad-calendar'; then
+        exit 0
+      fi
+      yad --calendar --title=yad-calendar --undecorated --no-buttons --borders=0 \
+        --close-on-unfocus --show-weeks >/dev/null &
+      pid=$!
+      for _ in $(seq 100); do
+        width=$(swaymsg -t get_tree | jq -r --argjson pid "$pid" \
+          'first(.. | objects | select(.pid? == $pid) | .rect.width) // empty')
+        [ -n "$width" ] && break
+        sleep 0.02
+      done
+      [ -n "$width" ] || exit 0
+      wsWidth=$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused) | .rect.width')
+      swaymsg "[pid=$pid] move position $(( (wsWidth - width) / 2 )) 4" >/dev/null
     '';
   };
 
@@ -208,6 +237,9 @@ in
       extraConfig = ''
         default_orientation vertical
 
+        # Calendar popup from the Waybar clock (calendarPopup above).
+        for_window [app_id="yad" title="^yad-calendar$"] floating enable
+
         # SwayFX-only — replaces picom's rounded corners. Plain sway would
         # reject this line.
         corner_radius 8
@@ -312,20 +344,12 @@ in
           disable-scroll = false;
         };
 
-        # popup-calendar + hyphen + time. The yad click-popup calendar is
-        # replaced by Waybar's built-in calendar tooltip.
+        # popup-calendar + hyphen + time. Click opens the yad calendar popup.
         clock = {
           interval = 1;
           format = "{0:%A, %B %d} <span color='#707880'>—</span> {0:%H:%M}";
-          tooltip-format = "<tt>{calendar}</tt>";
-          calendar = {
-                mode = "month";
-                format.today = "<span color='#F0C674'><b><u>{}</u></b></span>";
-            };
-          actions = {
-            on-scroll-up = "shift-up";
-            on-scroll-down = "shift-down";
-            };
+          tooltip = false;
+          on-click = "${calendarPopup}/bin/sway-calendar-popup";
         };
 
         pulseaudio = {
@@ -433,9 +457,21 @@ in
       };
     };
 
+    # Super Productivity injects <userData>/styles.css into its window; used
+    # to swap its unhinted bundled webfont for the system UI font.
+    xdg.configFile."superProductivity/styles.css".source =
+      ../../config/superproductivity/styles.css;
+
     gtk = {
             enable = true;
             colorScheme = "dark";
+            # The "No desktop" install ships no icon theme (only the empty
+            # hicolor fallback), so symbolic icons — e.g. the swaync media
+            # controls — were missing.
+            iconTheme = {
+              name = "Adwaita";
+              package = pkgs.adwaita-icon-theme;
+            };
             # UI font for GTK apps and Thunderbird/Firefox chrome. Unset, GTK
             # falls back to "Sans 10" = 13.33px at 96 DPI; fractional pixel
             # sizes can't snap to the grid when hinted and look fuzzy.
@@ -462,6 +498,20 @@ in
               gtk-xft-rgba = "rgb";
             };
         };
+    # Cursor theme. Unset, apps fall back to Adwaita's (or X's core) cursors,
+    # whose hand pointer looks rough. Bibata ships every XCursor size from 16
+    # to 96px, so it stays sharp if an output's scale is raised. Sets
+    # XCURSOR_THEME/SIZE, GTK's cursor settings and sway's `seat * xcursor_theme`
+    # so all clients and sway itself agree.
+    home.pointerCursor = {
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Original-Classic";
+      size = 20;
+      gtk.enable = true;
+      x11.enable = true; # XWayland apps
+      sway.enable = true;
+    };
+
     qt = {
             enable = true;
             platformTheme.name = "adwaita";

@@ -1,0 +1,8 @@
+/* The app's font stack lists Roboto/Inter before its bundled Open Sans
+   webfont; neither is installed, so it lands on the webfont, which ships
+   without hinting and renders fuzzy at 1x. Use the system UI font instead,
+   which fontconfig hints and subpixel-renders. */
+:root,
+body {
+  --font-primary-stack: "Noto Sans", sans-serif !important;
+}

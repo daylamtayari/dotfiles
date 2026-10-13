@@ -16,8 +16,8 @@
   --text-color-disabled: #707880; /* disabled */
   --bg-selected: #F0C674; /* primary */
   --border-radius: 8px; /* matches SwayFX corner_radius */
-  --font-size-body: 14px;
-  --font-size-summary: 15px;
+  --font-size-body: 10px;
+  --font-size-summary: 12px;
 }
 
 * {
