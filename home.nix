@@ -28,7 +28,7 @@
     ./modules/profiles/security.nix
     ./modules/profiles/pers.nix
     ./modules/profiles/work.nix
-    ./modules/profiles/i3.nix
+    ./modules/profiles/sway.nix
   ];
 
   home.stateVersion = "25.11";

@@ -1,0 +1,58 @@
+/* Waybar style — ported from the polybar config's [colors] and module
+ * formats (modules/profiles/sway.nix). */
+
+* {
+  font-family: "FiraCode Nerd Font", FontAwesome;
+  font-size: 13pt;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: #282A2E; /* background */
+  color: #C5C8C6; /* foreground */
+  border-radius: 6px;
+}
+
+#workspaces button {
+  padding: 0 8px;
+  color: #C5C8C6;
+  background: transparent;
+  box-shadow: inset 0 -3px transparent;
+}
+
+/* label-active: background-alt + primary underline */
+#workspaces button.focused {
+  background: #373B41;
+  box-shadow: inset 0 -3px #F0C674;
+}
+
+#workspaces button.urgent {
+  background: #A54242; /* alert */
+}
+
+#mode {
+  background: #373B41;
+  color: #F0C674;
+  padding: 0 8px;
+}
+
+#clock,
+#pulseaudio,
+#memory,
+#cpu,
+#battery,
+#tray,
+#custom-power {
+  padding: 0 8px; /* module-margin */
+}
+
+#clock,
+#custom-power {
+  color: #F0C674; /* primary */
+}
+
+#pulseaudio.muted {
+  color: #707880; /* disabled */
+}
