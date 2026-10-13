@@ -134,6 +134,10 @@ in
     # Linux-only in nixpkgs — excluded on macOS. ike-scan / veracrypt /
     # bloodhound have Homebrew equivalents (darwin/common.nix); vpnc has none
     # — openconnect (above) ships vpnc-script and covers it.
+    #
+    # bloodhound-ce is the maintained Community Edition; nixpkgs removed the
+    # legacy Electron `bloodhound` app (2025-09). CE is a web server that needs
+    # PostgreSQL + Neo4j running — the databases are not managed here.
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Web proxy
       # Burp Suite ships one jar for both editions now; the actual edition is
@@ -142,7 +146,7 @@ in
       (burpsuite.override { iconName = "pro"; })
       ike-scan
       veracrypt
-      bloodhound
+      bloodhound-ce
       vpnc
       john
     ];
