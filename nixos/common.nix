@@ -1,0 +1,28 @@
+# nixos/common.nix — shared NixOS system configuration. Per-machine hardware,
+# boot and desktop settings live in nixos/<host>/; per-host Home Manager
+# settings live in hosts/<host>.nix.
+{ pkgs, user, ... }:
+
+{
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  nixpkgs.config.allowUnfree = true;
+  # Workarounds for nixpkgs-unstable breakage; see overlays/default.nix.
+  # home-manager.useGlobalPkgs is set in flake.nix, so HM packages get these too.
+  nixpkgs.overlays = import ../overlays;
+
+  # Login shell. HM's programs.zsh configures zsh but cannot register it in
+  # /etc/shells or set the account's shell — that has to happen system-side.
+  programs.zsh.enable = true;
+  # Completions for HM-installed packages (useUserPackages puts them in the
+  # per-user profile, which zsh only searches if /share/zsh is linked).
+  environment.pathsToLink = [ "/share/zsh" ];
+
+  users.users.${user} = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    extraGroups = [ "wheel" "networkmanager" ];
+  };
+
+  environment.systemPackages = [ pkgs.git ];
+}
