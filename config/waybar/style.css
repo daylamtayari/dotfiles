@@ -9,10 +9,21 @@
   min-height: 0;
 }
 
+/* The window stays transparent so the rounded box's corners show the
+ * wallpaper rather than square background-coloured edges. */
 window#waybar {
-  background: #282A2E; /* background */
+  background: transparent;
   color: #C5C8C6; /* foreground */
-  border-radius: 6px;
+}
+
+window#waybar > box {
+  background: #282A2E; /* background */
+  border-radius: 8px; /* matches SwayFX corner_radius */
+}
+
+/* Keep the first workspace button's highlight inside the rounded corner. */
+#workspaces button:first-child {
+  border-radius: 8px 0 0 8px;
 }
 
 #workspaces button {
@@ -44,6 +55,7 @@ window#waybar {
 #cpu,
 #battery,
 #tray,
+#custom-notification,
 #custom-power {
   padding: 0 8px; /* module-margin */
 }

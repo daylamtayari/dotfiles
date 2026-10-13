@@ -5,6 +5,7 @@
   imports = [
     # Core modules:
     ./modules/git.nix
+    ./modules/ssh.nix
     ./modules/shell.nix
     ./modules/kitty.nix
     ./modules/ranger.nix

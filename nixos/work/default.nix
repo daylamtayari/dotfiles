@@ -4,7 +4,7 @@
 # machine's /etc/nixos — they hold the bootloader, disks, hostname, desktop and
 # system.stateVersion chosen at install time. Shared system config lives in
 # ../common.nix; the Home Manager side is hosts/work.nix (shared with the Mac).
-{ pkgs, user, ... }:
+{ config, pkgs, user, ... }:
 
 {
   imports = [
@@ -21,7 +21,16 @@
     # SwayFX — drop-in Sway fork that adds rounded corners (picom's job on i3).
     package = pkgs.swayfx;
   };
-  home-manager.users.${user}.my.profiles.sway.enable = true;
+  home-manager.users.${user} = {
+    my.profiles.sway.enable = true;
+
+    # Route SSH through 1Password's agent (enable it in 1Password → Settings →
+    # Developer → "Use the SSH agent"). Set here rather than in hosts/work.nix
+    # because the socket path is Linux-specific — the Mac's lives under
+    # ~/Library/Group Containers. The rest of the SSH config (including the
+    # local.conf include) is shared, in modules/ssh.nix.
+    programs.ssh.matchBlocks."*".identityAgent = "~/.1password/agent.sock";
+  };
 
   # Boot straight to a login prompt that launches Sway (the install chose "No
   # desktop", so there is no other display manager to conflict with).
@@ -46,8 +55,48 @@
   virtualisation.docker.enable = true;
   users.users.${user}.extraGroups = [ "docker" ];
 
-  # Mullvad — core.nix installs the GUI; it needs the system daemon to connect.
-  services.mullvad-vpn.enable = true;
+  # Tailscale — work tailnet. Authenticate once with `tailscale up`; the
+  # operator flag lets the user drive the CLI without sudo. openFirewall opens
+  # the WireGuard UDP port so peers connect directly instead of via DERP;
+  # useRoutingFeatures = "client" loosens rp_filter so exit nodes and subnet
+  # routes advertised by other nodes work.
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    useRoutingFeatures = "client";
+    extraSetFlags = [ "--operator=${user}" ];
+  };
+
+  hardware.bluetooth = {
+        enable = true;
+        powerOnBoot = true;
+    };
+  services.blueman.enable = true;
+
+  # Fingerprint reader (Goodix 27c6:6594, match-on-chip — stock libfprint
+  # goodixmoc driver). Enabling fprintd turns on pam_fprintd for every PAM
+  # service by default (sudo, swaylock, polkit/1Password, greetd), falling back
+  # to the password. Enroll once with `fprintd-enroll`.
+  services.fprintd.enable = true;
+
+  # swaylock only starts PAM once Enter is pressed, and pam_fprintd runs first
+  # by default — so a typed password sat waiting for a finger. Check the
+  # password first instead: type it + Enter to unlock, or press Enter on an
+  # empty prompt and then touch the reader.
+  security.pam.services.swaylock.rules.auth.fprintd.order =
+    config.security.pam.services.swaylock.rules.auth.unix.order + 10;
+
+  # Secret Service keyring — 1Password (and browsers, nm-applet, …) store
+  # credentials here; without one Sway has no org.freedesktop.secrets provider.
+  # greetd's PAM stack unlocks it with the login password, so login must stay
+  # password-only: a fingerprint login can't derive the keyring key and would
+  # leave it locked (1Password then prompts for it on every start).
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd = {
+    enableGnomeKeyring = true;
+    fprintAuth = false;
+  };
+  programs.seahorse.enable = true; # GUI for browsing/resetting the keyring
 
   # 1Password — the system modules (not a plain package) are needed for the
   # polkit unlock prompt, browser integration and `op` CLI integration.

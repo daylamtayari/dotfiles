@@ -13,6 +13,8 @@
     home.packages = with pkgs; [
       librewolf
       thunderbird
+      google-chrome
+      rclone
     ]
     # spotify's nixpkgs package is Linux-only; on macOS it is a Homebrew cask.
     # super-productivity's nixpkgs build aborts on macOS 26 (Tahoe): its
@@ -28,5 +30,39 @@
     programs.zsh.initContent = lib.mkAfter ''
       [[ -f "$HOME/.work.zsh" ]] && source "$HOME/.work.zsh"
     '';
+
+    # Mount Google Drive at ~/GoogleDrive. Expects a `gdrive` remote in
+    # ~/.config/rclone/rclone.conf (`rclone config`). PATH includes
+    # /run/wrappers/bin for NixOS's setuid fusermount3 wrapper.
+    systemd.user.services.rclone-gdrive = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+      Unit = {
+        Description = "rclone mount of Google Drive";
+        After = [ "network-online.target" ];
+        Wants = [ "network-online.target" ];
+      };
+      Service = {
+        Type = "notify";
+        Environment = [ "PATH=/run/wrappers/bin" ];
+        # Clear a stale mount left by an unclean stop ("-" ignores failure
+        # when nothing is mounted), then ensure the mountpoint exists.
+        ExecStartPre = [
+          "-/run/wrappers/bin/fusermount3 -uz %h/GoogleDrive"
+          "${pkgs.coreutils}/bin/mkdir -p %h/GoogleDrive"
+        ];
+        ExecStart = lib.concatStringsSep " " [
+          "${pkgs.rclone}/bin/rclone mount gdrive: %h/GoogleDrive"
+          "--vfs-cache-mode full"
+          "--vfs-cache-max-size 30G"
+          "--vfs-cache-max-age 72h"
+          "--dir-cache-time 1h"
+          "--poll-interval 1m"
+        ];
+        # Lazy unmount so a shell sitting in the mount doesn't block stopping.
+        ExecStop = "/run/wrappers/bin/fusermount3 -uz %h/GoogleDrive";
+        Restart = "on-failure";
+        RestartSec = 10;
+      };
+      Install.WantedBy = [ "default.target" ];
+    };
   };
 }

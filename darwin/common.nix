@@ -66,6 +66,7 @@
       "veracrypt" # security.nix — nixpkgs package is Linux-only
       "bloodhound" # security.nix — Linux-only; cask is deprecated upstream
       "mullvad-vpn" # core.nix — nixpkgs build is Linux-only despite its meta.platforms
+      "tailscale-app" # work tailnet — standalone app (menu bar + bundled CLI); needs a system extension, so not from nixpkgs
       # Nerd Font for kitty's font_family + the nvim / ranger devicons
       # (the nixpkgs font packages are Linux-only — see core.nix).
       "burp-suite"

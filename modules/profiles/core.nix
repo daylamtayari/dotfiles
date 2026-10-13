@@ -6,7 +6,7 @@
 #   - system / Qubes / desktop packages — stay pacman-managed (see Phase 6 notes)
 #   - tools owned by a dedicated module: git, delta, gh, kitty, neovim, ranger,
 #     zsh, zoxide
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # fontconfig — Linux only. The font packages below are Linux-only too, so on
@@ -76,7 +76,9 @@
   # `npmBuildScript = "pack:linux"`, so the macOS build packages a Linux
   # Electron tree and dies renaming dist/linux-arm64-unpacked/electron.
   # On macOS it comes from the Homebrew cask (darwin/common.nix).
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  # Skipped on work hosts, which use Tailscale instead (the two fight over
+  # routing/firewall rules).
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !config.my.profiles.work.enable) [
     mullvad-vpn
   ]
   # Fonts — Linux only. nixpkgs font packages drag glibc into their build

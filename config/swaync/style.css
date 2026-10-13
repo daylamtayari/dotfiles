@@ -1,0 +1,30 @@
+/* swaync style — the packaged default stylesheet (imported ahead of this in
+ * modules/profiles/sway.nix) recolored with the Waybar palette
+ * (config/waybar/style.css). */
+
+:root {
+  --cc-bg: rgba(40, 42, 46, 0.95); /* background #282A2E */
+  --noti-border-color: #373B41; /* background-alt */
+  --noti-bg: 40, 42, 46; /* background, as an r, g, b triple */
+  --noti-bg-alpha: 0.95;
+  --noti-bg-darker: #1F2023;
+  --noti-bg-hover: #373B41;
+  --noti-bg-focus: rgba(55, 59, 65, 0.6);
+  --noti-close-bg: #373B41;
+  --noti-close-bg-hover: #4A4F57;
+  --text-color: #C5C8C6; /* foreground */
+  --text-color-disabled: #707880; /* disabled */
+  --bg-selected: #F0C674; /* primary */
+  --border-radius: 8px; /* matches SwayFX corner_radius */
+  --font-size-body: 14px;
+  --font-size-summary: 15px;
+}
+
+* {
+  font-family: "FiraCode Nerd Font";
+}
+
+/* Critical notifications get the alert color as a border. */
+.notification-row .notification-background .notification.critical {
+  border: 1px solid #A54242;
+}
