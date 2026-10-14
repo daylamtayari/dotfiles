@@ -47,7 +47,57 @@
       };
       Install.WantedBy = [ "graphical-session.target" ];
     };
+
+    # Mic-mute LED (F4) follows the default source's mute state — the same
+    # thing the XF86AudioMicMute binding toggles (modules/profiles/sway.nix).
+    # The kernel's audio-micmute trigger is detached below (udev rule) because
+    # it tracks the HDA codec's headset-jack capture switch, which PipeWire
+    # leaves off, so the LED was always lit. brightnessctl writes the LED
+    # through logind, so no root or udev permissions are needed.
+    systemd.user.services.micmute-led = {
+      Unit = {
+        Description = "Sync the mic-mute LED with the default source";
+        After = [ "pipewire-pulse.service" ];
+        Wants = [ "pipewire-pulse.service" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.writeShellApplication {
+          name = "micmute-led";
+          runtimeInputs = [ pkgs.pulseaudio pkgs.brightnessctl ];
+          text = ''
+            last=""
+            sync() {
+              if [ "$(pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null)" = "Mute: yes" ]; then
+                state=1
+              else
+                state=0
+              fi
+              if [ "$state" != "$last" ]; then
+                brightnessctl -q -d platform::micmute s "$state" && last=$state
+              fi
+            }
+            sync
+            # Source events cover mute toggles; server events cover a change
+            # of default source (e.g. plugging in a USB mic).
+            pactl subscribe | while read -r line; do
+              case "$line" in
+                *" on source "* | *" on server "*) sync ;;
+              esac
+            done
+          '';
+        }}/bin/micmute-led";
+        Restart = "on-failure";
+        RestartSec = 2;
+      };
+      Install.WantedBy = [ "default.target" ];
+    };
   };
+
+  # Detach the micmute LED from the kernel's audio-micmute trigger so only the
+  # micmute-led user service above drives it.
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="leds", KERNEL=="platform::micmute", ATTR{trigger}="none"
+  '';
 
   # Boot straight to a login prompt that launches Sway (the install chose "No
   # desktop", so there is no other display manager to conflict with).
