@@ -26,8 +26,9 @@
 # rather than copy it, we jq-merge our tracked server set into just that key,
 # leaving everything else untouched. github uses OAuth (no token in git); nvim
 # is the linw1995/nvim-mcp stdio server, whose binary comes from that project's
-# own flake and lands on PATH via the Home Manager profile (modules/nvim.nix).
-# See config/claude/mcp-servers.json.
+# own flake and lands on PATH via the Home Manager profile (modules/nvim.nix),
+# spawned through the nvim-mcp-claude shim below. See
+# config/claude/mcp-servers.json.
 { lib, pkgs, ... }:
 
 {
@@ -64,6 +65,14 @@
       chmod 600 "$claudeJson"
     fi
   '';
+
+  # Claude-only shim around nvim-mcp that fills in the 2026-07-28 list-result
+  # cache fields Claude Code requires but nvim-mcp 0.7.2 omits; see the script's
+  # docstring. opencode keeps spawning plain `nvim-mcp`.
+  home.packages = [
+    (pkgs.writers.writePython3Bin "nvim-mcp-claude" { }
+      (builtins.readFile ../config/claude/nvim-mcp-claude.py))
+  ];
 
   # Symlinked (not copied): the statusline script is not something Claude edits,
   # so a read-only store symlink is fine and keeps it in sync with the repo.

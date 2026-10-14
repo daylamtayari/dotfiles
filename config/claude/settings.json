@@ -14,6 +14,9 @@
     "command": "~/.claude/statusline.sh"
   },
   "permissions": {
+    "allow": [
+      "Read(//tmp/**)"
+    ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(rm -fr *)",
