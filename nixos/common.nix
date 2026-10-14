@@ -28,5 +28,9 @@
   # third-party scripts with hardcoded #!/bin/bash etc. work.
   services.envfs.enable = true;
 
+  # Stub dynamic loader so prebuilt generic-linux binaries (mason.nvim LSPs and
+  # formatters, npm/pip wheels with native bits) can run.
+  programs.nix-ld.enable = true;
+
   environment.systemPackages = [ pkgs.git ];
 }

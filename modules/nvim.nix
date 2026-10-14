@@ -8,6 +8,10 @@
   home.packages = [
     pkgs.neovim
 
+    # tree-sitter CLI for nvim-treesitter's parser builds. Mason's prebuilt
+    # binary is dynamically linked against a generic /lib and won't run on NixOS.
+    pkgs.tree-sitter
+
     # The nvim-mcp *server* binary. Clients (Claude Code's "nvim" entry in
     # config/claude/mcp-servers.json, opencode's in config/opencode/opencode.jsonc)
     # spawn it as plain `nvim-mcp`, resolved off PATH via the HM profile. The

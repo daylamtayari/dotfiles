@@ -32,6 +32,7 @@ in
       luarocks
       ruby
       rustup
+      python3
       # julia-bin (upstream's official binary) rather than `julia`: the source
       # build has no aarch64-darwin binary cache and its bundled OpenBLAS test
       # suite fails on Apple silicon. Same version, all three platforms.
