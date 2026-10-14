@@ -27,7 +27,8 @@ let
 
   lock = "${config.programs.swaylock.package}/bin/swaylock -f";
   pactlBin = "${pkgs.pulseaudio}/bin/pactl";
-  brightnessctlBin = "${pkgs.brightnessctl}/bin/brightnessctl";
+  playerctlBin = "${pkgs.playerctl}/bin/playerctl";
+  brightnessctlBin ="${pkgs.brightnessctl}/bin/brightnessctl";
   swayncClient = "${config.services.swaync.package}/bin/swaync-client";
 
   # Sway port of config/aerospace/bring-workspace.sh (itself a port of the i3
@@ -141,6 +142,22 @@ let
       else
         printf '{"text":"<span color=\x27#707880\x27>󰖂</span>","tooltip":"Tailscale: %s","class":"down"}\n' "$state"
       fi
+    '';
+  };
+
+  # Waybar prev/next skip button around the mpris module: prints the icon ($1)
+  # while a player is playing or paused and an empty line (hiding the module)
+  # otherwise. Event-driven via playerctl --follow rather than polled.
+  mediaButton = pkgs.writeShellApplication {
+    name = "waybar-media-button";
+    runtimeInputs = [ pkgs.playerctl ];
+    text = ''
+      playerctl -p playerctld --follow status 2>/dev/null | while read -r status; do
+        case "$status" in
+          Playing | Paused) printf '%s\n' "$1" ;;
+          *) echo ;;
+        esac
+      done
     '';
   };
 
@@ -267,6 +284,9 @@ in
           "XF86AudioLowerVolume" = "exec ${pactlBin} set-sink-volume @DEFAULT_SINK@ -10%";
           "XF86AudioMute" = "exec ${pactlBin} set-sink-mute @DEFAULT_SINK@ toggle";
           "XF86AudioMicMute" = "exec ${pactlBin} set-source-mute @DEFAULT_SOURCE@ toggle";
+          "XF86AudioPlay" = "exec ${playerctlBin} play-pause";
+          "XF86AudioNext" = "exec ${playerctlBin} next";
+          "XF86AudioPrev" = "exec ${playerctlBin} previous";
           "XF86MonBrightnessUp" = "exec ${brightnessctlBin} s 10+%";
           "XF86MonBrightnessDown" = "exec ${brightnessctlBin} s 10-%";
         };
@@ -395,7 +415,7 @@ in
         height = 32;
         margin = "4 4 0 4"; # polybar's transparent 4pt border
 
-        modules-left = [ "sway/workspaces" "sway/mode" ];
+        modules-left = [ "sway/workspaces" "sway/mode" "custom/media-prev" "mpris" "custom/media-next" ];
         modules-center = [ "clock" ];
         modules-right = [ "bluetooth" "pulseaudio" "custom/network" "custom/tailscale" "memory" "cpu" "battery" "tray" "custom/notification" "custom/power" ];
 
@@ -410,6 +430,32 @@ in
           format = "{0:%A, %B %d} <span color='#707880'>—</span> {0:%H:%M}";
           tooltip = false;
           on-click = "${calendarPopup}/bin/sway-calendar-popup";
+        };
+
+        # Now playing, laid out as `< ARTIST - TITLE >`: the skip icons are
+        # separate modules for previous/next, and clicking the track toggles
+        # play/pause. Follows the most recently active MPRIS player (Spotify,
+        # Firefox, …) via playerctld; all three hide when nothing is playing.
+        "custom/media-prev" = {
+          exec = "${mediaButton}/bin/waybar-media-button 󰒮";
+          restart-interval = 5;
+          tooltip = false;
+          on-click = "${playerctlBin} -p playerctld previous";
+        };
+
+        mpris = {
+          format = "{dynamic}";
+          format-paused = "<span color='#707880'>{dynamic}</span>";
+          dynamic-order = [ "artist" "title" ];
+          dynamic-separator = " - ";
+          dynamic-len = 40;
+        };
+
+        "custom/media-next" = {
+          exec = "${mediaButton}/bin/waybar-media-button 󰒭";
+          restart-interval = 5;
+          tooltip = false;
+          on-click = "${playerctlBin} -p playerctld next";
         };
 
         pulseaudio = {
@@ -459,13 +505,14 @@ in
 
         # Hidden when there is no Bluetooth controller. Click opens Blueman.
         bluetooth = {
-          format = "<span color='#F0C674'>󰂯</span>";
+          format = "<span color='#707880'>󰂯</span>";
           format-disabled = "<span color='#707880'>󰂲</span>";
           format-off = "<span color='#707880'>󰂲</span>";
           format-connected = "<span color='#F0C674'>󰂱</span> {device_alias}";
-          format-connected-battery = "<span color='#F0C674'>󰂱</span> {device_alias} {device_battery_percentage}%";
-          tooltip-format = "{controller_alias}: {status}";
-          tooltip-format-connected = "{controller_alias}\n\n{device_enumerate}";
+          format-connected-battery = "<span color='#F0C674'>󰂱</span>";
+          tooltip-format = "{status}";
+          tooltip-format-connected = "{device_enumerate}";
+          tooltip-format-connected-battery = "{device_enumerate} ({device_battery_percentage}%)";
           tooltip-format-enumerate-connected = "{device_alias}";
           on-click = "blueman-manager";
         };
@@ -595,6 +642,11 @@ in
     # laptop). Profiles go in `settings` once the layouts are known — arrange
     # them in wdisplays, then record the result here.
     services.kanshi.enable = true;
+
+    # Tracks the most recently active MPRIS player. Waybar's mpris module
+    # follows it by default and shows nothing without it; it also makes the
+    # playerctl media keys act on whatever played last.
+    services.playerctld.enable = true;
     
     # Polkit authentication agent — shows the password/fingerprint prompt for
     # actions marked auth_self/auth_admin. Sway has none built in, so without

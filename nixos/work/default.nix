@@ -30,6 +30,23 @@
     # ~/Library/Group Containers. The rest of the SSH config (including the
     # local.conf include) is shared, in modules/ssh.nix.
     programs.ssh.matchBlocks."*".identityAgent = "~/.1password/agent.sock";
+
+    # Start 1Password minimized to the tray with the Sway session, so the SSH
+    # agent socket above (and browser/CLI integration) is up without opening
+    # the app first. Tied to graphical-session.target so it gets Sway's
+    # WAYLAND_DISPLAY and stops with the session.
+    systemd.user.services._1password = {
+      Unit = {
+        Description = "1Password";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = "${config.programs._1password-gui.package}/bin/1password --silent";
+        Restart = "on-failure";
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
   };
 
   # Boot straight to a login prompt that launches Sway (the install chose "No
@@ -48,6 +65,14 @@
     enable = true;
     alsa.enable = true;
     pulse.enable = true;
+    # Make a newly connected output (e.g. Bluetooth headphones) the default
+    # sink/source. pipewire-pulse's port of PulseAudio's
+    # module-switch-on-connect; HDMI outputs are ignored by default.
+    extraConfig.pipewire-pulse."90-switch-on-connect" = {
+      "pulse.cmd" = [
+        { cmd = "load-module"; args = "module-switch-on-connect"; flags = [ ]; }
+      ];
+    };
   };
 
   # Docker daemon — the dev profile installs only the docker clients on Linux

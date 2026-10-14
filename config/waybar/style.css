@@ -68,6 +68,23 @@ window#waybar > box {
   color: #F0C674; /* primary */
 }
 
+/* Now playing: `< ARTIST - TITLE >`, set off from the workspaces by a
+ * spacer and kept tight so the three modules read as one. */
+#custom-media-prev {
+  margin-left: 24px;
+  padding: 0 6px 0 8px;
+  color: #F0C674; /* primary */
+}
+
+#mpris {
+  padding: 0 2px;
+}
+
+#custom-media-next {
+  padding: 0 8px 0 6px;
+  color: #F0C674; /* primary */
+}
+
 #pulseaudio.muted {
   color: #707880; /* disabled */
 }

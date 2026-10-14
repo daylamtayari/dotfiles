@@ -20,5 +20,6 @@
     kdePackages.okular # PDF viewer
     libreoffice-fresh
     pavucontrol # audio control
+    thunar
   ];
 }
