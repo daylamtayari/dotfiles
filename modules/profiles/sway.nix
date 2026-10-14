@@ -51,10 +51,11 @@ let
     name = "sway-power-menu";
     runtimeInputs = [ pkgs.rofi ];
     text = ''
-      choice=$(printf 'Lock\nSuspend\nShutdown\nReboot\nLogout\n' | rofi -dmenu -i -p "Power")
+      choice=$(printf 'Lock\nSuspend\nHibernate\nShutdown\nReboot\nLogout\n' | rofi -dmenu -i -p "Power")
       case "$choice" in
         Lock) ${lock} ;;
         Suspend) systemctl suspend ;;
+        Hibernate) systemctl hibernate ;;
         Shutdown) systemctl poweroff ;;
         Reboot) systemctl reboot ;;
         Logout) swaymsg exit ;;
@@ -88,6 +89,58 @@ let
       [ -n "$width" ] || exit 0
       wsWidth=$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused) | .rect.width')
       swaymsg "[pid=$pid] move position $(( (wsWidth - width) / 2 )) 4" >/dev/null
+    '';
+  };
+
+  # Waybar connectivity indicator. The built-in network module tracks a single
+  # interface, so it can't show wired and wireless at once; ask NetworkManager
+  # instead. Icons only in the bar; the tooltip lists the active connection
+  # names (for Wi-Fi, NetworkManager names the profile after the SSID).
+  networkStatus = pkgs.writeShellApplication {
+    name = "waybar-network-status";
+    runtimeInputs = [ pkgs.networkmanager pkgs.jq ];
+    text = ''
+      eth=0 wifi=0 lines=()
+      # Terse output escapes ':' in values as '\:' — CONNECTION is last, so
+      # read takes the rest of the line and the escapes are undone after.
+      while IFS=: read -r type state name; do
+        case "$state" in connected*) ;; *) continue ;; esac
+        name=''${name//\\:/:}
+        case "$type" in
+          ethernet) eth=1 lines+=("Ethernet: $name") ;;
+          wifi) wifi=1 lines+=("Wi-Fi: $name") ;;
+        esac
+      done < <(nmcli -t -f TYPE,STATE,CONNECTION device 2>/dev/null || true)
+
+      case "$eth$wifi" in
+        11) icons="󰈀 󰖩" ;;
+        10) icons="󰈀" ;;
+        01) icons="󰖩" ;;
+        *)
+          printf '{"text":"<span color=\x27#707880\x27>󰖪</span>","tooltip":"Disconnected","class":"disconnected"}\n'
+          exit 0
+          ;;
+      esac
+      # Tooltips are Pango markup, so escape the (user-controlled) names.
+      printf '%s\n' "''${lines[@]}" | jq -Rsc --arg icons "$icons" '{
+        text: "<span color=\"#F0C674\">\($icons)</span>",
+        tooltip: (rtrimstr("\n") | gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;")),
+        class: "connected"
+      }'
+    '';
+  };
+
+  # Waybar Tailscale indicator — lit while the backend is Running.
+  tailscaleStatus = pkgs.writeShellApplication {
+    name = "waybar-tailscale-status";
+    runtimeInputs = [ pkgs.tailscale pkgs.jq ];
+    text = ''
+      state=$(tailscale status --json 2>/dev/null | jq -r '.BackendState // "Unknown"') || state=Unavailable
+      if [ "$state" = Running ]; then
+        printf '{"text":"<span color=\x27#F0C674\x27>󰖂</span>","tooltip":"Tailscale: up","class":"up"}\n'
+      else
+        printf '{"text":"<span color=\x27#707880\x27>󰖂</span>","tooltip":"Tailscale: %s","class":"down"}\n' "$state"
+      fi
     '';
   };
 
@@ -240,6 +293,13 @@ in
         # Calendar popup from the Waybar clock (calendarPopup above).
         for_window [app_id="yad" title="^yad-calendar$"] floating enable
 
+        # Blank the internal panel while the lid is shut. Mostly moot while
+        # logind suspends on docked lid close (nixos/work/default.nix), but
+        # takes over if HandleLidSwitchDocked is set to "ignore" or sleep is
+        # inhibited. --reload re-applies the current lid state on reload.
+        bindswitch --reload --locked lid:on output eDP-1 disable
+        bindswitch --reload --locked lid:off output eDP-1 enable
+
         # SwayFX-only — replaces picom's rounded corners. Plain sway would
         # reject this line.
         corner_radius 8
@@ -337,7 +397,7 @@ in
 
         modules-left = [ "sway/workspaces" "sway/mode" ];
         modules-center = [ "clock" ];
-        modules-right = [ "pulseaudio" "memory" "cpu" "battery" "tray" "custom/notification" "custom/power" ];
+        modules-right = [ "bluetooth" "pulseaudio" "custom/network" "custom/tailscale" "memory" "cpu" "battery" "tray" "custom/notification" "custom/power" ];
 
         "sway/workspaces" = {
           all-outputs = false; # polybar pin-workspaces = true
@@ -358,6 +418,19 @@ in
           format-icons.default = [ "󰕿" "󰖀" "󰕾" ];
           on-click = "${pactlBin} set-sink-mute @DEFAULT_SINK@ toggle";
           on-click-right = "pavucontrol";
+        };
+
+        # Wired / wireless / none — see networkStatus above.
+        "custom/network" = {
+          exec = "${networkStatus}/bin/waybar-network-status";
+          return-type = "json";
+          interval = 5;
+        };
+
+        "custom/tailscale" = {
+          exec = "${tailscaleStatus}/bin/waybar-tailscale-status";
+          return-type = "json";
+          interval = 5;
         };
 
         memory = {
@@ -523,10 +596,6 @@ in
     # them in wdisplays, then record the result here.
     services.kanshi.enable = true;
     
-    # Blueman tray icon (shows in Waybar's tray). The Bluetooth stack and the
-    # blueman D-Bus service are system-side — see nixos/work/default.nix.
-    services.blueman-applet.enable = true;
-
     # Polkit authentication agent — shows the password/fingerprint prompt for
     # actions marked auth_self/auth_admin. Sway has none built in, so without
     # it polkit just denies them (`fprintd-enroll`, 1Password's system unlock,

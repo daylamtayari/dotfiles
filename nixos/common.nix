@@ -24,5 +24,9 @@
     extraGroups = [ "wheel" "networkmanager" ];
   };
 
+  # FUSE-backed /bin and /usr/bin that resolve to whatever is on PATH, so
+  # third-party scripts with hardcoded #!/bin/bash etc. work.
+  services.envfs.enable = true;
+
   environment.systemPackages = [ pkgs.git ];
 }

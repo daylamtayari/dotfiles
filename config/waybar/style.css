@@ -51,9 +51,12 @@ window#waybar > box {
 
 #clock,
 #pulseaudio,
+#custom-network,
+#custom-tailscale,
 #memory,
 #cpu,
 #battery,
+#bluetooth,
 #tray,
 #custom-notification,
 #custom-power {

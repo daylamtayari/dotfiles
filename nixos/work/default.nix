@@ -55,8 +55,11 @@
   virtualisation.docker.enable = true;
   users.users.${user}.extraGroups = [ "docker" ];
 
-  # Tailscale — work tailnet. Authenticate once with `tailscale up`; the
-  # operator flag lets the user drive the CLI without sudo. openFirewall opens
+  # Tailscale — work tailnet. Authenticate once with `tailscale up`; tailscaled
+  # persists the login and the up/down state, so it reconnects on its own at
+  # boot. extraSetFlags are applied by `tailscale set` on every tailscaled
+  # start: --accept-routes takes subnet routes advertised by other nodes, and
+  # the operator flag lets the user drive the CLI without sudo. openFirewall opens
   # the WireGuard UDP port so peers connect directly instead of via DERP;
   # useRoutingFeatures = "client" loosens rp_filter so exit nodes and subnet
   # routes advertised by other nodes work.
@@ -64,7 +67,7 @@
     enable = true;
     openFirewall = true;
     useRoutingFeatures = "client";
-    extraSetFlags = [ "--operator=${user}" ];
+    extraSetFlags = [ "--accept-routes" "--operator=${user}" ];
   };
 
   hardware.bluetooth = {
@@ -72,6 +75,39 @@
         powerOnBoot = true;
     };
   services.blueman.enable = true;
+
+  # Sleep. This ThinkPad's firmware only exposes s2idle (/sys/power/mem_sleep
+  # has no "deep" — S3 is gone on these AMD models), and s2idle drains the
+  # battery overnight. So the "deep" sleep is suspend-then-hibernate: s2idle
+  # first, then after HibernateDelaySec write RAM to the encrypted swap
+  # (29.8G ≥ 27G RAM) and power off. The initrd already unlocks that swap's
+  # LUKS volume (configuration.nix), so resume just needs pointing at it.
+  boot.resumeDevice = "/dev/mapper/luks-70b1ff41-bea7-46f0-ba12-8ac594b95efe";
+  # HibernateOnACPower = false: while plugged in, stay suspended and don't
+  # start the HibernateDelaySec countdown until AC is disconnected — so
+  # unplugging a closed, sleeping laptop still ends in hibernation. systemd
+  # wakes every SuspendEstimationSec to check power state (default 1h), so
+  # an unplug is noticed at most 15 min late. It also hibernates early if
+  # the battery hits ~5% while suspended.
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "15min";
+    HibernateOnACPower = false;
+    SuspendEstimationSec = "15min";
+  };
+
+  # Lid close → suspend-then-hibernate everywhere; the AC/battery split is
+  # handled by HibernateOnACPower above rather than by a separate plain
+  # "suspend" for ExternalPower, which would never hibernate if unplugged
+  # while asleep. swayidle's before-sleep hook locks the screen first.
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend-then-hibernate";
+    HandleLidSwitchExternalPower = "suspend-then-hibernate";
+    # Docked = an external monitor (or dock) is connected; logind checks this
+    # before ExternalPower, so it must be set too. To keep working on the
+    # external monitor with the lid shut, set this to "ignore" — Sway's lid
+    # bindswitch (modules/profiles/sway.nix) then blanks the internal panel.
+    HandleLidSwitchDocked = "suspend-then-hibernate";
+  };
 
   # Fingerprint reader (Goodix 27c6:6594, match-on-chip — stock libfprint
   # goodixmoc driver). Enabling fprintd turns on pam_fprintd for every PAM
@@ -90,12 +126,15 @@
   # credentials here; without one Sway has no org.freedesktop.secrets provider.
   # greetd's PAM stack unlocks it with the login password, so login must stay
   # password-only: a fingerprint login can't derive the keyring key and would
-  # leave it locked (1Password then prompts for it on every start).
+  # leave it locked (1Password then prompts for it on every start). This also
+  # makes the first auth after boot always a password; fingerprint is only
+  # accepted afterwards (swaylock, sudo, polkit).
+  #
+  # greetd's PAM file is just `substack login`, so fprintd has to be disabled
+  # on `login` itself — fprintAuth = false on greetd alone has no effect.
   services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd = {
-    enableGnomeKeyring = true;
-    fprintAuth = false;
-  };
+  security.pam.services.greetd.enableGnomeKeyring = true;
+  security.pam.services.login.fprintAuth = false;
   programs.seahorse.enable = true; # GUI for browsing/resetting the keyring
 
   # 1Password — the system modules (not a plain package) are needed for the
