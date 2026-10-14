@@ -25,6 +25,7 @@
       spotify
       super-productivity
       slack # unfree, x86_64-linux only; Homebrew cask on macOS
+      zoom-us # unfree; Homebrew cask on macOS
     ];
 
     programs.zsh.initContent = lib.mkAfter ''

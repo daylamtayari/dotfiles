@@ -57,6 +57,7 @@
       "firefox" # core-gui.nix — Mozilla-signed build (the nixpkgs Firefox is unsigned)
       "raycast"
       "slack"
+      "zoom" # work.nix — zoom-us from nixpkgs on NixOS
       "spotify" # work.nix — nixpkgs package is Linux-only
       "super-productivity" # work.nix — nixpkgs Electron build aborts on macOS 26 (libuv#976)
       "vlc" # core-gui.nix — nixpkgs vlc skipped on macOS

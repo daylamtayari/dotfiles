@@ -92,5 +92,9 @@
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
     dejavu_fonts
+    # Common web/Electron UI font stacks name these ahead of any bundled
+    # webfont; without them apps fall through to unhinted webfonts.
+    roboto
+    inter
   ];
 }
