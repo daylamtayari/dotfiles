@@ -27,6 +27,14 @@
       flake = false;
     };
 
+    # pyenv-virtualenv plugin. Not packaged in nixpkgs, so it is pulled as a
+    # plain source tree and symlinked into ~/.pyenv/plugins by
+    # modules/profiles/dev.nix; flake.lock pins the commit.
+    pyenv-virtualenv = {
+      url = "github:pyenv/pyenv-virtualenv";
+      flake = false;
+    };
+
     # nvim-mcp — the MCP server that exposes a running Neovim to Claude Code
     # and opencode. Its flake ships the Rust server as a package, which is why
     # we take the binary from here rather than from lazy.nvim's

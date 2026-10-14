@@ -4,7 +4,7 @@
 # packages only where a host enables it (currently `dev` and `cyber`).
 #
 # Curated from this dev VM's explicitly-installed Arch packages (`paru -Qe`).
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   # gitall — runs a command in every git repo below a directory, in parallel.
@@ -126,6 +126,11 @@ in
       podman
       podman-compose
     ];
+
+    # pyenv-virtualenv — pyenv discovers plugins under $PYENV_ROOT/plugins, so
+    # link the pinned source tree there. The shell hook (virtualenv-init) lives
+    # in modules/shell.nix next to `pyenv init`.
+    home.file.".pyenv/plugins/pyenv-virtualenv".source = inputs.pyenv-virtualenv;
 
     # macOS: bring the Podman VM up automatically so the docker/podman clients
     # work without a manual `podman machine start`. This is a LaunchAgent, so it
