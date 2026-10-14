@@ -124,6 +124,7 @@ in
       enum4linux
       neo4j # BloodHound's database backend
       exploitdb # searchsploit
+      seclists
 
       # Password cracking
       hashcat
@@ -150,5 +151,8 @@ in
       vpnc
       john
     ];
+
+    # Stable handle on the wordlists, e.g. `ffuf -w $SECLISTS/Discovery/Web-Content/common.txt`.
+    home.sessionVariables.SECLISTS = "${pkgs.seclists}/share/wordlists/seclists";
   };
 }
