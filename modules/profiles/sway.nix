@@ -273,6 +273,8 @@ in
           "${mod}+Shift+e" =
             "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'";
           "${mod}+Control+l" = "exec ${lock}";
+          # Same as lid close (nixos/work/default.nix); swayidle's before-sleep locks.
+          "${mod}+Control+s" = "exec systemctl suspend-then-hibernate";
           "${mod}+r" = "mode resize";
 
           # Notifications (swaync)
