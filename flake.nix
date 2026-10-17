@@ -46,6 +46,14 @@
     # nixpkgs plus a fenix Rust toolchain, and repointing it would force a
     # from-source rebuild of the toolchain instead of reusing the binary cache.
     nvim-mcp.url = "github:linw1995/nvim-mcp";
+
+    # CrowdStrike Falcon sensor (user-mode/eBPF) for the work NixOS machine.
+    # The flake ships only the module and packaging; the proprietary .deb is
+    # supplied from the local store (see nixos/work/falcon-sensor.nix).
+    falcon-sensor = {
+      url = "git+ssh://git@github.com/tayari-liftoff/falcon-sensor-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, nix-homebrew, ... }@inputs:

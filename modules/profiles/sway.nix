@@ -641,7 +641,40 @@ in
     # Applies saved monitor layouts automatically on hotplug (docked vs
     # laptop). Profiles go in `settings` once the layouts are known — arrange
     # them in wdisplays, then record the result here.
-    services.kanshi.enable = true;
+    services.kanshi = {
+      enable = true;
+      settings = let
+        laptop = "Lenovo Group Limited MNG007QB1-2 Unknown";
+        lg4k = "LG Electronics LG HDR 4K 0x00058EB7";
+        msi4k = "Microstep MPG 274U E16M CF0H236500373";
+        lenovo1440 = "Lenovo Group Limited P27h-20 V90B2N9G";
+      in [
+        {
+          profile.name = "laptop";
+          profile.outputs = [ { criteria = laptop; status = "enable"; position = "0,0"; } ];
+        }
+        # LG on direct HDMI; MSI + P27h share the dock, which comes up in DP
+        # Alt Mode with only 2 lanes (~12.96 Gbps). That fits one 4K60 only
+        # with CVT-RB2 timing (the EDID's 594 MHz mode is rejected), so the
+        # P27h stays off and the MSI gets its modeline via exec — kanshi can't
+        # express modelines. Re-enable the P27h (transform 270, right of the
+        # LG) once it has its own link (free USB-C port or a TB4 cable).
+        # Scale 1.2 snaps to 1/120 steps, so each 4K is 3199x1799 logical —
+        # positions use that, not 3200, or a 1px gap blocks the cursor.
+        {
+          profile.name = "docked";
+          profile.outputs = [
+            { criteria = msi4k; status = "enable"; scale = 1.2; position = "0,0"; }
+            { criteria = lg4k; status = "enable"; mode = "3840x2160@60Hz"; scale = 1.2; position = "3199,0"; }
+            { criteria = lenovo1440; status = "disable"; }
+            { criteria = laptop; status = "enable"; position = "2239,1799"; }
+          ];
+          profile.exec = [
+            "${pkgs.sway}/bin/swaymsg -- output '\"${msi4k}\"' modeline 522.61 3840 3848 3880 3920 2160 2208 2216 2222 +hsync -vsync"
+          ];
+        }
+      ];
+    };
 
     # Tracks the most recently active MPRIS player. Waybar's mpris module
     # follows it by default and shows nothing without it; it also makes the

@@ -10,6 +10,7 @@
   imports = [
     ./configuration.nix # imports ./hardware-configuration.nix itself
     ../common.nix
+    ./falcon-sensor.nix
   ];
 
   # Sway desktop. The compositor is system-side (PAM for swaylock, polkit, xdg
