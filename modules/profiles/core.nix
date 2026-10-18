@@ -48,6 +48,7 @@
     dust # dust
     procs
     erdtree # erd
+    libqalculate
     # Networking
     curlie
     httpie
