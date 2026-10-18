@@ -656,7 +656,7 @@ in
           profile.outputs = [ { criteria = laptop; status = "enable"; position = "0,0"; } ];
         }
         # LG on direct HDMI; MSI (at 120Hz) + P27h on the Thunderbolt 4 dock.
-        # Left to right: P27h (portrait, transform 90), MSI, LG, with the
+        # Left to right: P27h (portrait, transform 270), MSI, LG, with the
         # laptop below the MSI. Everything is shifted right by the P27h's
         # width so no output sits at a negative x.
         # Scale 1.2 snaps to 1/120 steps, so each 4K is 3199x1799 logical —
@@ -664,7 +664,7 @@ in
         {
           profile.name = "docked";
           profile.outputs = [
-            { criteria = lenovo1440; status = "enable"; mode = "2560x1440"; transform = "90"; position = "0,0"; }
+            { criteria = lenovo1440; status = "enable"; mode = "2560x1440"; transform = "270"; position = "0,0"; }
             { criteria = msi4k; status = "enable"; mode = "3840x2160@120Hz"; scale = 1.2; position = "1440,0"; }
             { criteria = lg4k; status = "enable"; mode = "3840x2160@60Hz"; scale = 1.2; position = "4639,0"; }
             { criteria = laptop; status = "enable"; position = "1886,1799"; }
