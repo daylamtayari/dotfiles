@@ -655,24 +655,19 @@ in
           profile.name = "laptop";
           profile.outputs = [ { criteria = laptop; status = "enable"; position = "0,0"; } ];
         }
-        # LG on direct HDMI; MSI + P27h share the dock, which comes up in DP
-        # Alt Mode with only 2 lanes (~12.96 Gbps). That fits one 4K60 only
-        # with CVT-RB2 timing (the EDID's 594 MHz mode is rejected), so the
-        # P27h stays off and the MSI gets its modeline via exec — kanshi can't
-        # express modelines. Re-enable the P27h (transform 270, right of the
-        # LG) once it has its own link (free USB-C port or a TB4 cable).
+        # LG on direct HDMI; MSI (at 120Hz) + P27h on the Thunderbolt 4 dock.
+        # Left to right: P27h (portrait, transform 90), MSI, LG, with the
+        # laptop below the MSI. Everything is shifted right by the P27h's
+        # width so no output sits at a negative x.
         # Scale 1.2 snaps to 1/120 steps, so each 4K is 3199x1799 logical —
         # positions use that, not 3200, or a 1px gap blocks the cursor.
         {
           profile.name = "docked";
           profile.outputs = [
-            { criteria = msi4k; status = "enable"; scale = 1.2; position = "0,0"; }
-            { criteria = lg4k; status = "enable"; mode = "3840x2160@60Hz"; scale = 1.2; position = "3199,0"; }
-            { criteria = lenovo1440; status = "disable"; }
-            { criteria = laptop; status = "enable"; position = "2239,1799"; }
-          ];
-          profile.exec = [
-            "${pkgs.sway}/bin/swaymsg -- output '\"${msi4k}\"' modeline 522.61 3840 3848 3880 3920 2160 2208 2216 2222 +hsync -vsync"
+            { criteria = lenovo1440; status = "enable"; mode = "2560x1440"; transform = "90"; position = "0,0"; }
+            { criteria = msi4k; status = "enable"; mode = "3840x2160@120Hz"; scale = 1.2; position = "1440,0"; }
+            { criteria = lg4k; status = "enable"; mode = "3840x2160@60Hz"; scale = 1.2; position = "4639,0"; }
+            { criteria = laptop; status = "enable"; position = "1886,1799"; }
           ];
         }
       ];
