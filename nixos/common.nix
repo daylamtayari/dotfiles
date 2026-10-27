@@ -28,6 +28,9 @@
   # third-party scripts with hardcoded #!/bin/bash etc. work.
   services.envfs.enable = true;
 
+  # Cron daemon + setuid crontab wrapper for per-user crontabs.
+  services.cron.enable = true;
+
   # Distrust these root CAs in the system trust store. System-level option —
   # Home Manager has no equivalent, so it can't live in home.nix.
   security.pki.caCertificateBlacklist = [

@@ -7,7 +7,12 @@
 
 {
   home.packages = with pkgs; [
-    obsidian # unfree
+    # unfree. Electron only uses the Secret Service keyring on desktops it
+    # recognises (GNOME, KDE, …); under sway it falls back to unencrypted
+    # "basic text" storage, so point it at gnome-keyring explicitly.
+    (obsidian.override {
+      commandLineArgs = lib.optionalString stdenv.hostPlatform.isLinux "--password-store=gnome-libsecret";
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # firefox is Linux-only here; on macOS it comes from the Homebrew cask in
