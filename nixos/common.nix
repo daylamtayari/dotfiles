@@ -28,6 +28,15 @@
   # third-party scripts with hardcoded #!/bin/bash etc. work.
   services.envfs.enable = true;
 
+  # Distrust these root CAs in the system trust store. System-level option —
+  # Home Manager has no equivalent, so it can't live in home.nix.
+  security.pki.caCertificateBlacklist = [
+    "Comodo AAA Services root"
+    "emSign ECC Root CA - G3"
+    "emSign Root CA - C1"
+    "emSign ECC Root CA - C3"
+  ];
+
   # Stub dynamic loader so prebuilt generic-linux binaries (mason.nvim LSPs and
   # formatters, npm/pip wheels with native bits) can run.
   programs.nix-ld.enable = true;

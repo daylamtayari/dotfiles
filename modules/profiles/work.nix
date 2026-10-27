@@ -55,8 +55,17 @@
           "--vfs-cache-mode full"
           "--vfs-cache-max-size 30G"
           "--vfs-cache-max-age 72h"
-          "--dir-cache-time 1h"
+          # Change polling invalidates modified directories, so listings can
+          # be cached indefinitely instead of expiring and re-fetching.
+          "--dir-cache-time 9999h"
           "--poll-interval 1m"
+          # Remote control on a private socket (%t is 0700) for the warmup.
+          "--rc --rc-no-auth --rc-addr unix://%t/rclone-gdrive.sock"
+        ];
+        # Prime the directory cache in the background once the mount is up.
+        ExecStartPost = lib.concatStringsSep " " [
+          "${pkgs.rclone}/bin/rclone rc --unix-socket %t/rclone-gdrive.sock"
+          "vfs/refresh recursive=true _async=true"
         ];
         # Lazy unmount so a shell sitting in the mount doesn't block stopping.
         ExecStop = "/run/wrappers/bin/fusermount3 -uz %h/GoogleDrive";

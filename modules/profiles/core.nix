@@ -29,6 +29,7 @@
     fzf
     jq
     jless
+    tabiew
     glow
     tree
     highlight

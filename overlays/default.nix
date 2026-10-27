@@ -63,4 +63,35 @@
       ];
     }
   )
+
+  # semgrep-core 1.180.0 fails in postFixup with patchelf's
+  # `shiftFile: Assertion 'splitIndex == -1' failed` (patchelf 0.19.2 and
+  # patchelfUnstable alike). The upstream wheel binary has already been through
+  # patchelf once, and setting interpreter and rpath together trips over the
+  # earlier rewrite.
+  #
+  # The rpath change isn't needed: the binary's RUNPATH already includes
+  # $ORIGIN/libs, where the bundled libs live, and the Nix loader finds glibc
+  # in its own directory. Setting just the interpreter succeeds and gives a
+  # working binary. Drop this once nixpkgs' semgrep-core builds again.
+  (
+    final: prev:
+    prev.lib.optionalAttrs prev.stdenv.hostPlatform.isLinux {
+      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+        (
+          pyfinal: pyprev: {
+            semgrep = pyprev.semgrep.override {
+              semgrep-core = pyprev.semgrep.passthru.semgrep-core.overrideAttrs {
+                postFixup = ''
+                  patchelf \
+                    --set-interpreter "$(cat ${final.stdenv.cc}/nix-support/dynamic-linker)" \
+                    $out/bin/semgrep-core
+                '';
+              };
+            };
+          }
+        )
+      ];
+    }
+  )
 ]

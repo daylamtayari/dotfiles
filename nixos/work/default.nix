@@ -129,6 +129,19 @@
   # Docker daemon — the dev profile installs only the docker clients on Linux
   # and expects the system to provide the daemon.
   virtualisation.docker.enable = true;
+  # Move Docker off its default 172.17.0.0/16 (and the 172.18+ pools for user
+  # networks): the work tailnet advertises those ranges, and with
+  # --accept-routes Tailscale's routing table (consulted before main) sends
+  # container reply traffic to tailscale0, leaving containers with no network.
+  # Neither range below is currently advertised on the tailnet (check with
+  # `ip route show table 52`).
+  # TODO: revisit when deploying homelab services — make sure these ranges
+  # don't collide with homelab subnets/VLANs or anything those services route
+  # to, and that a self-hosted stack doesn't assume Docker's 172.x defaults.
+  virtualisation.docker.daemon.settings = {
+    bip = "10.200.0.1/24";
+    default-address-pools = [ { base = "10.201.0.0/16"; size = 24; } ];
+  };
   users.users.${user}.extraGroups = [ "docker" ];
 
   # Tailscale — work tailnet. Authenticate once with `tailscale up`; tailscaled
